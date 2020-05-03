@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Provide methods to plot the bar(plotbar()), to print stresses at Gauss points, 
-plot displacement and stress distributions obtained by FE analysis calling 
-disp_and_stress and by exact solution calling ExactSolution(postprocessor).
+Provide methods to create FE model for a bar from a json file, to plot the 
+bar, to print stresses at Gauss points, to plot displacement and stress 
+distributions obtained by FE analysis and exact solution.
 
 Created on Sun Apr 24 18:56:57 2020
 
@@ -11,13 +11,74 @@ Created on Sun Apr 24 18:56:57 2020
 """
 
 import numpy as np
+import json
 import matplotlib.pyplot as plt
 import tikzplotlib
 
 import FEData as model
 from utitls import gauss
 from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar
-from Bar1DElem import Nmatrix1D, Bmatrix1D
+from Bar1DElem import setup_ID_LM, Nmatrix1D, Bmatrix1D
+
+
+def create_model_json(DataFile):
+    """ 
+    Initialize the FEM model from file DataFile (in json format)
+    """
+
+    # input data from json file
+    with open(DataFile) as f_obj:
+        FEData = json.load(f_obj)
+
+    model.Title= FEData['Title']
+    model.nsd  = FEData['nsd']
+    model.ndof = FEData['ndof']
+    model.nnp  = FEData['nnp']
+    model.nel  = FEData['nel']
+    model.nen  = FEData['nen']    
+    model.neq  = model.ndof*model.nnp
+
+    # initialize K, d and f 
+    model.f = np.zeros((model.neq,1))            
+    model.d = np.zeros((model.neq,1))        
+    model.K = np.zeros((model.neq,model.neq))    
+
+    # element and material data (given at the element nodes)
+    model.E     = np.array(FEData['E'])
+    model.body  = np.array(FEData['body'])
+    model.CArea = np.array(FEData['CArea'])
+
+    # gauss integration
+    model.ngp = FEData['ngp']
+
+    # boundary conditions
+    model.flags = np.array(FEData['flags'])
+    model.e_bc = np.array(FEData['e_bc'])
+    model.n_bc = np.array(FEData['n_bc'])
+    model.nd = FEData['nd']
+
+    # point forces
+    model.np = FEData['np']
+    if model.np > 0:
+        model.xp = np.array(FEData['xp'])
+        model.P  = np.array(FEData['P'])
+
+    # output plots
+    model.plot_bar = FEData['plot_bar']
+    model.plot_nod = FEData['plot_nod']
+    model.nplot = model.nnp*10
+    model.plot_tex = FEData['plot_tex']
+
+    # define the mesh
+    model.x = np.array(FEData['x'])
+    model.y = np.array(FEData['y'])  
+    model.IEN = np.array(FEData['IEN'])
+
+    model.ID  = np.zeros(model.neq,np.int)
+    model.LM  = np.zeros((model.nen,model.nel),np.int)   
+
+    # generate LM and ID arrays
+    setup_ID_LM()
    
 def plotbar():
     """ Plot the bar  """
