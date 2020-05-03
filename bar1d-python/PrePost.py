@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Provide methods to plot the bar(plotbar()), to print stresses at Gauss points, 
+plot displacement and stress distributions obtained by FE analysis calling 
+disp_and_stress and by exact solution calling ExactSolution(postprocessor).
+
+Created on Sun Apr 24 18:56:57 2020
+
+@author: xzhang@tsinghua.edu.cn
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import tikzplotlib
+
+import FEData as model
+from utitls import gauss
+from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar
+from Bar1DElem import Nmatrix1D, Bmatrix1D
+   
+def plotbar():
+    """ Plot the bar  """
+    if model.plot_bar == 'yes':   
+        for i in range(model.nel): 
+            XX = np.array([
+                model.x[model.IEN[0,i]-1], model.x[model.IEN[1,i]-1], 
+                model.x[model.IEN[2,i]-1], model.x[model.IEN[0,i]-1]])
+            YY = np.array([
+                model.y[model.IEN[0,i]-1], model.y[model.IEN[1,i]-1],
+                model.y[model.IEN[2,i]-1], model.y[model.IEN[0,i]-1]])
+            plt.figure(1)
+            plt.plot(XX,YY)
+            plt.plot(XX,-YY) 
+            plt.plot(XX, [0,0,0,0], '+r')   
+     
+            # check if user defined the plots of the global node numbering  
+            if model.plot_nod == 'yes':    
+                plt.text(XX[0],-1.5,str(model.IEN[0,i])) 
+                plt.text(XX[1],-1.5,str(model.IEN[1,i])) 
+                plt.text(XX[2],-1.5,str(model.IEN[2,i])) 
+    
+        plt.plot([ model.x[model.IEN[0,0]-1], model.x[model.IEN[0,0]-1]],
+                 [-model.y[model.IEN[0,0]-1], model.y[model.IEN[0,0]-1]])
+        plt.plot([ model.x[model.IEN[-1,-1]-1], model.x[model.IEN[-1,-1]-1]],
+                 [-model.y[model.IEN[-1,-1]-1], model.y[model.IEN[-1,-1]-1]])
+        plt.title('Bar Plot') 
+        plt.show()
+     
+        # print some mesh parameters 
+        print('\n  Bar Params') 
+        print('No. of Elements  ' + str(model.nel)) 
+        print('No. of Nodes     ' + str(model.nnp)) 
+        print('No. of Equations ' + str(model.neq))
+        
+        
+def disp_and_stress(e, d, ax1, ax2):
+    """
+    Print stresses at Gauss points, plot displacements and stress 
+    distributions obtained by FE analysiss
+
+    Args:
+        e : (int) element number
+        d : (numnp.array(neq,1)) solution vector
+        ax1 : axis to draw displacement distribution
+        ax2 : axis to draw stress distribution
+    """
+    de = model.d[model.LM[:,e]-1]  # extract element nodal displacements 
+    IENe = model.IEN[:,e]-1       # extract element connectivity information 
+    xe = model.x[IENe]            # extract element coordinates 
+    J = (xe[-1] - xe[0])/2       # Jacobian  
+    w, gp = gauss(model.ngp)      # Gauss points and weights
+    
+    # compute stresses at Gauss points 
+    gauss_pt = np.zeros(model.ngp)
+    stress_gauss = np.zeros(model.ngp)
+    for i in range(model.ngp):
+        xt  = 0.5*(xe[0]+xe[-1])+J*gp[i]  # Gauss point in the physical coordinates 
+        gauss_pt[i] = xt         # store gauss point information   
+             
+        N  = Nmatrix1D(xt,xe)    # extract shape functions  
+        B  = Bmatrix1D(xt,xe)    # extract derivative of shape functions  
+      
+        Ee = N@model.E[IENe]             # Young's modulus at element Gauss points    
+        stress_gauss[i] = Ee*B@de  # compute stresses at Gauss points 
+      
+    # print stresses at element gauss points    
+    print("%8d %12.6f %12.6f %16.6f %16.6f" 
+          %(e,gauss_pt[0],gauss_pt[1],stress_gauss[0],stress_gauss[1]))
+
+    # equally distributed coordinate within an element
+    xplot = np.linspace(xe[0],xe[-1],model.nplot)               
+
+    # compute displacements and stresses  
+    displacement = np.zeros(model.nplot)
+    stress = np.zeros(model.nplot)
+    for i in range(model.nplot):
+        xi = xplot[i]              # current coordinate   
+        N  = Nmatrix1D(xi,xe)      # shape functions  
+        B  = Bmatrix1D(xi,xe)      # derivative of shape functions    
+         
+        Ee = N@model.E[IENe]      # Young's modulus   
+        displacement[i] = N@de     # displacement output 
+        stress[i]       = Ee*B@de  # stress output s
+         
+    # plot displacements and stresses  
+    line1, = ax1.plot(xplot,displacement)
+    line2, = ax2.plot(xplot,stress) 
+    if e == 0:
+        line1.set_label('FE')
+        line2.set_label('FE')
+
+
+def postprocessor(BarType):
+    """ 
+    Print stresses at Gauss points, plot displacement and stress
+    distributions obtained by FE analysis calling disp_and_stress and
+    by exact solution calling ExactSolution.
+    """    
+    
+    print()
+    print('Print stresses at the Gauss points \n')
+    print('%8s %12s %12s %16s %16s'
+          %("Element","x(gauss1)","x(gauss2)","stress(gauss1)","stress(gauss2)"))
+    print('--------------------------------------------------------------------')
+    
+    plt.figure(2);  fig,(ax1,ax2) = plt.subplots(2,1)
+    plt.tight_layout()
+
+    ax1.set_title('FE analysis of 1D bar'); 
+    ax1.set_ylabel('displacement')  
+
+    ax2.set_xlabel('x')
+    ax2.set_ylabel('stress')
+    
+    # loop over elements to compute the stresses
+    for e in range(model.nel):
+        # compute stresses and displacements for the current element
+        disp_and_stress(e,model.d,ax1,ax2)
+        
+    # plot the exact solution
+    if BarType == "TaperedBar":
+        ExactSolution_TaperedBar(ax1,ax2)
+    elif BarType == "CompressionBar":
+        ExactSolution_CompressionBar(ax1,ax2)
+    elif BarType != None:
+        print('Exact solution for %s is not available'%(BarType))
+
+    ax1.legend()
+    ax2.legend()
+
+    # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
+    # which can be added into your LaTex source code by "\input{fe_plot.tex}"
+    if model.plot_tex == "yes":
+        tikzplotlib.save("fe_plot.tex")
