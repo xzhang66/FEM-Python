@@ -21,18 +21,18 @@ from Bar1DElem import Nmatrix1D, Bmatrix1D
    
 def plotbar():
     """ Plot the bar  """
-    if model.plot_bar == 'yes':   
+    if model.plot_bar == 'yes' and model.nen == 3:
         for i in range(model.nel): 
             XX = np.array([
                 model.x[model.IEN[0,i]-1], model.x[model.IEN[1,i]-1], 
-                model.x[model.IEN[2,i]-1], model.x[model.IEN[0,i]-1]])
+                model.x[model.IEN[2,i]-1] ])
             YY = np.array([
                 model.y[model.IEN[0,i]-1], model.y[model.IEN[1,i]-1],
-                model.y[model.IEN[2,i]-1], model.y[model.IEN[0,i]-1]])
+                model.y[model.IEN[2,i]-1] ]) 
             plt.figure(1)
             plt.plot(XX,YY)
             plt.plot(XX,-YY) 
-            plt.plot(XX, [0,0,0,0], '+r')   
+            plt.plot(XX, [0,0,0], '+r')   
      
             # check if user defined the plots of the global node numbering  
             if model.plot_nod == 'yes':    
@@ -124,7 +124,7 @@ def postprocessor(BarType):
           %("Element","x(gauss1)","x(gauss2)","stress(gauss1)","stress(gauss2)"))
     print('--------------------------------------------------------------------')
     
-    plt.figure(2);  fig,(ax1,ax2) = plt.subplots(2,1)
+    fig,(ax1,ax2) = plt.subplots(2,1)
     plt.tight_layout()
 
     ax1.set_title('FE analysis of 1D bar'); 
@@ -148,6 +148,7 @@ def postprocessor(BarType):
 
     ax1.legend()
     ax2.legend()
+    plt.show()
 
     # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
     # which can be added into your LaTex source code by "\input{fe_plot.tex}"

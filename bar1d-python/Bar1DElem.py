@@ -17,23 +17,6 @@ import json
 import FEData as model
 from utitls import gauss
 
-def initialize_matrices():
-    """ 
-    Initialize the number of equations neq, the stifness matrix K, 
-    the nodal displacement vector d and the nodal force vector f,
-    the boundary flags, essential boundary condition e_bc and 
-    natural boundary condition n_bc
-    """
-    
-    model.neq  = model.ndof*model.nnp
-    model.f = np.zeros((model.neq,1))            
-    model.d = np.zeros((model.neq,1))        
-    model.K = np.zeros((model.neq,model.neq))    
-
-    model.flags= np.zeros((model.neq,1),np.int)        
-    model.e_bc = np.zeros((model.neq,1))        
-    model.n_bc = np.zeros((model.neq,1))
-
 
 def create_model_json(DataFile):
     """ 
@@ -49,10 +32,13 @@ def create_model_json(DataFile):
     model.ndof = FEData['ndof']
     model.nnp  = FEData['nnp']
     model.nel  = FEData['nel']
-    model.nen  = FEData['nen']
+    model.nen  = FEData['nen']    
+    model.neq  = model.ndof*model.nnp
 
-    # initialize related matrices 
-    initialize_matrices()
+    # initialize K, d and f 
+    model.f = np.zeros((model.neq,1))            
+    model.d = np.zeros((model.neq,1))        
+    model.K = np.zeros((model.neq,model.neq))    
 
     # element and material data (given at the element nodes)
     model.E     = np.array(FEData['E'])
