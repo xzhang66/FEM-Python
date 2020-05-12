@@ -5,7 +5,7 @@ Provides methods to calculate element stiffness matrix
 
 Created on Sat May 9 15:40:00 2020
 
-@author: xzhang@tsinghua.edu.cn, thurcni@163.com
+@author: thurcni@163.com, xzhang@tsinghua.edu.cn
 """
 
 import FEData as model

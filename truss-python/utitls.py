@@ -7,7 +7,7 @@ Provides utilities used by FE analysis.
 
 Created on Sat May 9 17:39:00 2020
 
-@author: xzhang@tsinghua.edu.cn, thurcni@163.com
+@author: thurcni@163.com, xzhang@tsinghua.edu.cn
 """
 
 import numpy as np

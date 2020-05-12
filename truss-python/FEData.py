@@ -28,6 +28,10 @@ Global variables defining the FEM model
   plot_truss: (bool) Plot bar ?
   plot_node : plot node number ?
   plot_tex  : Convert figures into PGFPlots figures in LaTex file ?
+
+Created on Sat May 9 18:34:00 2020
+
+@author: thurcni@163.com, xzhang@tsinghua.edu.cn
 '''
 
 Title = ""
