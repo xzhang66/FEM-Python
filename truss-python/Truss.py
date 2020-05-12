@@ -14,7 +14,7 @@ Command line arguments:
 
 Created on Sat May 9 18:34:00 2020
 
-@author: xzhang@tsinghua.edu.cn
+@author: thurcni@163.com, xzhang@tsinghua.edu.cn
 """
 from sys import argv,exit
 import FEData as model

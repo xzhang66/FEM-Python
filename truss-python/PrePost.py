@@ -6,7 +6,7 @@ to plot the truss, to calculate and print stresses of every element.
 
 Created on Sat May 9 15:43:00 2020
 
-@author: xzhang@tsinghua.edu.cn, thurcni@163.com
+@author: thurcni@163.com, xzhang@tsinghua.edu.cn
 """
 
 import FEData as model
