@@ -3,7 +3,7 @@
 """
 Truss - truss FE analysis program.
   Element types  : 1-, 2- or 3-dimension linear bar element.
-  Problem solved : truss whose Young's modulus, cross-sectinal area are known within each element
+  Problem solved : truss whose Young's modulus, cross-sectional area are known within each element
     is deformed at nodal forces.
 
 Usage:
