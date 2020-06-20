@@ -18,14 +18,14 @@ Global variables defining the FEM model
   stress:(numpy.array(nel)) Element values of stress
 
   x    : (numpy.array(nnp))x coordinate.
-  y    : (numpy.array(nnp))y coordinates, used only for the bar plot.
+  y    : (numpy.array(nnp))y coordinates.
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   LM   : (numpy.array(nen,nel)) Location matrix.
   K    : (numpy.array(neq,neq)) Global stiffness matrix
   f    : (numpy.array(neq,1)) Global nodal force vector            
   d    : (numpy.array(neq,1)) Solution vector
 
-  plot_truss: (bool) Plot bar ?
+  plot_truss: (bool) Plot truss ?
   plot_node : plot node number ?
   plot_tex  : Convert figures into PGFPlots figures in LaTex file ?
 
