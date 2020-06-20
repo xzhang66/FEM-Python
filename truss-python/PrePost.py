@@ -15,9 +15,61 @@ import json
 import matplotlib.pyplot as plt
 
 
+def create_model_json(DataFile):
+    """ 
+    Initialize the FEM model from file DataFile (in json format)
+    """
+
+    # input data from json file
+    with open(DataFile) as f_obj:
+        FEData = json.load(f_obj)
+    
+    model.Title= FEData['Title']
+    model.nsd  = FEData['nsd']
+    model.ndof = FEData['ndof']
+    model.nnp  = FEData['nnp']
+    model.nel  = FEData['nel']
+    model.nen  = FEData['nen']    
+    model.neq  = model.ndof*model.nnp
+    model.nd   = FEData['nd']
+
+    # initialize K, d and f 
+    model.f = np.zeros((model.neq,1))            
+    model.d = np.zeros((model.neq,1))        
+    model.K = np.zeros((model.neq,model.neq))
+
+    # define the mesh
+    model.x = np.array(FEData['x'])
+    model.y = np.array(FEData['y'])  
+    model.IEN = np.array(FEData['IEN'], dtype=np.int)
+    model.LM = np.zeros((model.nen*model.ndof, model.nel), dtype=np.int)
+    set_LM()
+
+    # element and material data (given at the element)
+    model.E     = np.array(FEData['E'])
+    model.CArea = np.array(FEData['CArea'])
+    model.leng  = np.sqrt(np.power(model.x[model.IEN[:, 1]-1] - 
+                                   model.x[model.IEN[:, 0]-1], 2) +
+                          np.power(model.y[model.IEN[:, 1]-1] - 
+                                   model.y[model.IEN[:, 0]-1], 2))
+    model.stress= np.zeros((model.nel,))
+
+    # prescribed forces
+    fdof = FEData['fdof']
+    force= FEData['force']
+    for ind, value in enumerate(fdof):
+        model.f[value-1][0] = force[ind]
+
+    # output plots
+    model.plot_truss= FEData['plot_truss']
+    model.plot_node = FEData['plot_node']
+    model.plot_tex  = FEData['plot_tex']
+    plottruss()
+
+
 def set_LM():
     '''
-    set up Local Matrix
+    set up Location Matrix
     '''
     for e in range(model.nel):
         for j in range(model.nen):
@@ -71,59 +123,7 @@ def plottruss():
     print("No. of Equations {0}".format(model.neq))
 
 
-def create_model_json(DataFile):
-    """ 
-    Initialize the FEM model from file DataFile (in json format)
-    """
-
-    # input data from json file
-    with open(DataFile) as f_obj:
-        FEData = json.load(f_obj)
-    
-    model.Title= FEData['Title']
-    model.nsd  = FEData['nsd']
-    model.ndof = FEData['ndof']
-    model.nnp  = FEData['nnp']
-    model.nel  = FEData['nel']
-    model.nen  = FEData['nen']    
-    model.neq  = model.ndof*model.nnp
-    model.nd   = FEData['nd']
-
-    # initialize K, d and f 
-    model.f = np.zeros((model.neq,1))            
-    model.d = np.zeros((model.neq,1))        
-    model.K = np.zeros((model.neq,model.neq))
-
-    # define the mesh
-    model.x = np.array(FEData['x'])
-    model.y = np.array(FEData['y'])  
-    model.IEN = np.array(FEData['IEN'], dtype=np.int)
-    model.LM = np.zeros((model.nen*model.ndof, model.nel), dtype=np.int)
-    set_LM()
-
-    # element and material data (given at the element)
-    model.E     = np.array(FEData['E'])
-    model.CArea = np.array(FEData['CArea'])
-    model.leng  = np.sqrt(np.power(model.x[model.IEN[:, 1]-1] - 
-                                   model.x[model.IEN[:, 0]-1], 2) +
-                          np.power(model.y[model.IEN[:, 1]-1] - 
-                                   model.y[model.IEN[:, 0]-1], 2))
-    model.stress= np.zeros((model.nel,))
-
-    # prescribed forces
-    fdof = FEData['fdof']
-    force= FEData['force']
-    for ind, value in enumerate(fdof):
-        model.f[value-1][0] = force[ind]
-
-    # output plots
-    model.plot_truss= FEData['plot_truss']
-    model.plot_node = FEData['plot_node']
-    model.plot_tex  = FEData['plot_tex']
-    plottruss()
-
-
-def disp_and_stress():
+def print_stress():
     '''
     Calculate and print stresses of every element
     '''
