@@ -113,8 +113,15 @@ def plottruss():
                              plottruss is invalid".format(model.ndof))
         
         plt.title("Truss Plot")
-#       plt.savefig("./truss.png")
-        plt.show()
+        plt.xlabel("x")
+        plt.ylabel("y")
+
+        # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
+        # which can be added into your LaTex source code by "\input{fe_plot.tex}"
+        if model.plot_tex == "yes":
+            import tikzplotlib
+            tikzplotlib.clean_figure()
+            tikzplotlib.save("fe_plot.tex")
     
     print("\t2D Truss Params \n")
     print(model.Title + "\n")

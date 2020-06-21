@@ -25,6 +25,6 @@
 
 	"plot_truss": "yes",
 	"plot_node" : "yes",
-	"plot_tex": "no"
+	"plot_tex"  : "yes"
 }
 
