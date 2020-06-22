@@ -14,73 +14,124 @@ Created on Sun Apr 24 18:56:57 2020
 import numpy as np
 import FEData as model
 
+
 def gauss(ngp):
-    """
-    Get Gauss points in the parent element domain [-1, 1] and 
-    the corresponding weights.
-    
-    Args: 
-        ngp : (int) number of Gauss points.
-        
-    Returns: w,gp
-        w  : weights.
-        gp : Gauss points in the parent element domain.
-    """
-    if ngp == 1:
-        gp = 0
-        w = 2
-    elif ngp == 2:
-        gp = [-0.57735027, 0.57735027]
-        w = [1, 1]
-    elif ngp == 3:
-        gp = [-0.7745966692, 0.7745966692, 0.0]
-        w = [0.5555555556, 0.5555555556, 0.8888888889]
-    return w, gp
+	"""
+	Get Gauss points in the parent element domain [-1, 1] and
+	the corresponding weights.
+
+	Args:
+		ngp : (int) number of Gauss points.
+
+	Returns: w,gp
+		w  : weights.
+		gp : Gauss points in the parent element domain.
+	"""
+	gp = None
+	w = None
+	if ngp == 1:
+		gp = 0
+		w = 2
+	elif ngp == 2:
+		gp = [-0.57735027, 0.57735027]
+		w = [1, 1]
+	elif ngp == 3:
+		gp = [-0.7745966692, 0.7745966692, 0.0]
+		w = [0.5555555556, 0.5555555556, 0.8888888889]
+	else:
+		raise ValueError("The given number (ngp = {}) of Gauss points is too large and not implemented".format(ngp))
+	return w, gp
 
 
-def assembly(e,ke,fe):
-    """
-    Assemble element stiffness matrix and nodal force vector.
-    
-    Args:
-        e   : (int) Element number
-        ke  : (numpy(nen,nen)) element stiffness matrix
-        fe  : (numpy(nen,1)) element nodal force vector
-    """
-    for loop1 in range(model.nen):
-       i = model.LM[loop1,e]-1
-       model.f[i] += fe[loop1]   # assemble nodal force vector
-       
-       for loop2 in range(model.nen):
-          j = model.LM[loop2,e]-1
-          model.K[i,j] += ke[loop1,loop2]   # assemble stiffness matrix
+def assembly(e, ke, fe):
+	"""
+	Assemble element stiffness matrix and nodal force vector.
+
+	Args:
+		e   : (int) Element number
+		ke  : (numpy(nen,nen)) element stiffness matrix
+		fe  : (numpy(nen,1)) element nodal force vector
+	"""
+	for loop1 in range(model.nen*model.ndof):
+		i = model.LM[loop1, e]-1
+		model.f[i] += fe[loop1]   # assemble nodal force vector
+
+		for loop2 in range(model.nen*model.ndof):
+			j = model.LM[loop2, e]-1
+			model.K[i, j] += ke[loop1, loop2]   # assemble stiffness matrix
 
 
 def solvedr():
-    """
-    Partition and solve the system of equations
-        
-    Returns:
-        f_E : (numpy.array(nd,1)) Reaction force vector
-    """
-    nd = model.nd; neq=model.neq
-    K_E = model.K[0:nd, 0:nd]
-    K_F = model.K[nd:neq, nd:neq]
-    K_EF =model. K[0:nd, nd:neq]
-    f_F = model.f[nd:neq]
-    d_E = model.d[0:nd]
-    
-    # solve for d_F
-    d_F = np.linalg.solve(K_F, f_F - K_EF.T @ d_E) 
+	"""
+	Partition and solve the system of equations
 
-    # reconstruct the global displacement d
-    model.d = np.append(d_E,d_F)
-    
-    # compute the reaction r
-    f_E = K_E@d_E + K_EF@d_F
-    
-    # write to the workspace
-    print('\nsolution d');  print(model.d)
-    print('\nreaction f =', f_E)
-    
-    return f_E
+	Returns:
+		f_E : (numpy.array(nd,1)) Reaction force vector
+	"""
+	nd = model.nd
+	neq = model.neq
+	K_E = model.K[0:nd, 0:nd]
+	K_F = model.K[nd:neq, nd:neq]
+	K_EF = model. K[0:nd, nd:neq]
+	f_F = model.f[nd:neq]
+	d_E = model.d[0:nd]
+
+	# solve for d_F
+	d_F = np.linalg.solve(K_F, f_F - K_EF.T @ d_E)
+
+	# reconstruct the global displacement d
+	model.d = np.append(d_E,d_F)
+
+	# compute the reaction r
+	f_E = K_E@d_E + K_EF@d_F - model.f[:model.nd]
+
+	# write to the workspace
+	print('\nsolution d')
+	print(model.d)
+	print('\nreaction f =', f_E)
+
+	return f_E
+
+
+def point_and_trac():
+	"""
+	Add the nodal forces and natural B.C. to the global force vector.
+	"""
+	# Assemble point forces
+	model.f = model.f + model.P[model.ID - 1]
+
+	# Compute nodal boundary force vector
+	for i in range(model.nbe):
+		ft = np.zeros((4, 1))							# initialize nodal boundary force vector
+		node1 = int(model.n_bc[0, i])					# first node
+		node2 = int(model.n_bc[1, i])					# second node
+		n_bce = model.n_bc[2:, i].reshape((-1, 1))		# traction value at node1
+
+		# coordinates
+		x1 = model.x[node1 - 1]
+		y1 = model.y[node1 - 1]
+		x2 = model.x[node2 - 1]
+		y2 = model.y[node2 - 1]
+
+		# edge length
+		leng = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+		J = leng/2.0
+
+		w, gp = gauss(model.ngp)
+
+		for j in range(model.ngp):
+			psi = gp[j]
+			N = 0.5*np.array([[1-psi, 0, 1+psi, 0],
+							  [0, 1-psi, 0, 1+psi]])
+
+			traction = N@n_bce
+			ft = ft + w[j]*J*(N.T@traction)
+
+		# Assemble nodal boundary force vector
+		ind1 = model.ndof*(node1 - 1)
+		ind2 = model.ndof*(node2 - 1)
+
+		model.f[model.ID[ind1] - 1, 0] += ft[0]
+		model.f[model.ID[ind1 + 1] - 1, 0] += ft[1]
+		model.f[model.ID[ind2] - 1, 0] += ft[2]
+		model.f[model.ID[ind2 + 1] - 1, 0] += ft[3]
