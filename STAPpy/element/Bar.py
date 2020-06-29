@@ -12,8 +12,10 @@
 /*     http://www.comdyn.cn/                                                 */
 /*****************************************************************************/
 """
+import sys
+sys.path.append('../')
 import numpy as np
-from Element import CElement
+from element.Element import CElement
 
 
 class CBar(CElement):

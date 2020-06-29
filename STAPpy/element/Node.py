@@ -55,8 +55,8 @@ class CNode(object):
 
 		self.NodeNumber = N
 
-		self.bcode[0] = int(line[1]); self.bcode[1] = int(line[2]); self.bcode[2] = int(line[3])
-		self.XYZ[0] = int(line[4]); self.XYZ[1] = int(line[5]); self.XYZ[2] = int(line[6])
+		self.bcode[0] = np.int(line[1]); self.bcode[1] = np.int(line[2]); self.bcode[2] = np.int(line[3])
+		self.XYZ[0] = np.double(line[4]); self.XYZ[1] = np.double(line[5]); self.XYZ[2] = np.double(line[6])
 
 	def Write(self, output_file):
 		"""
@@ -104,7 +104,7 @@ class CNode(object):
 			if self.bcode[dof] == 0:
 				displacement_info += "%18.6e"%0.0
 			else:
-				displacement_info += displacement[self.bcode[dof] - 1]
+				displacement_info += "%18.6e"%displacement[self.bcode[dof] - 1]
 
 		displacement_info += '\n'
 		# print the nodal info on the screen

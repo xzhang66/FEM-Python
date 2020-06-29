@@ -12,7 +12,9 @@
 /*     http://www.comdyn.cn/                                                 */
 /*****************************************************************************/
 """
-from Solver import CSolver
+import sys
+sys.path.append('../')
+from solver.Solver import CSolver
 import numpy as np
 import sys
 

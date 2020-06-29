@@ -12,12 +12,12 @@
 /*     http://www.comdyn.cn/                                                 */
 /*****************************************************************************/
 """
-from Singleton import Singleton
+import sys
+sys.path.append('../')
+from utils.Singleton import Singleton
 from element.ElementGroup import ElementTypes
 import datetime
 import numpy as np
-import sys
-sys.path.append('../')
 
 weekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 month = ["January", "February", "March", "April", "May", "June",
@@ -40,7 +40,7 @@ class COutputter(object):
 	def PrintTime(self):
 		""" Output current time and date """
 		t = datetime.datetime.now()
-		time_info = t.strftime("        (%H:%M:&S on ")
+		time_info = t.strftime("        (%H:%M:%S on ")
 		time_info += (month[t.month - 1] + " ")
 		time_info += (str(t.day) + ", ")
 		time_info += (str(t.year) + ", ")
@@ -193,17 +193,17 @@ class COutputter(object):
 		FEMData = Domain()
 
 		for lcase in range(FEMData.GetNLCASE()):
-			LoadData = FEMData.GetLoadCases()
+			LoadData = FEMData.GetLoadCases()[lcase]
 
 			pre_info = " L O A D   C A S E   D A T A\n\n" \
 					   "     LOAD CASE NUMBER . . . . . . . =%6d\n" \
 					   "     NUMBER OF CONCENTRATED LOADS . =%6d\n\n" \
 					   "    NODE       DIRECTION      LOAD\n" \
-					   "   NUMBER                   MAGNITUDE\n"%(lcase, LoadData.nloads)
+					   "   NUMBER                   MAGNITUDE\n"%(lcase + 1, LoadData.nloads)
 			print(pre_info, end="")
 			self._output_file.write(pre_info)
 
-			LoadData.Write(self._output_file, lcase)
+			LoadData.Write(self._output_file, lcase+1)
 
 			print("\n", end="")
 			self._output_file.write("\n")
@@ -281,7 +281,7 @@ class COutputter(object):
 				   "     MAXIMUM HALF BANDWIDTH  . . . . . . . . . . . .(MK ) = {}\n" \
 				   "     MEAN HALF BANDWIDTH . . . . . . . . . . . . . .(MM ) = {}\n\n\n".format(
 			FEMData.GetNEQ(), FEMData.GetStiffnessMatrix().size(),
-			FEMData.GetStiffnessMatrix().CalculateMaximumHalfBandwidth(),
+			FEMData.GetStiffnessMatrix().GetMaximumHalfBandwidth(),
 			FEMData.GetStiffnessMatrix().size()/FEMData.GetNEQ()
 		)
 		print(pre_info, end="")

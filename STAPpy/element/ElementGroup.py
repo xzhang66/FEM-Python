@@ -12,10 +12,10 @@
 /*     http://www.comdyn.cn/                                                 */
 /*****************************************************************************/
 """
-from Bar import CBar
-from Material import CBarMaterial
 import sys
 sys.path.append('../')
+from element.Bar import CBar
+from element.Material import CBarMaterial
 
 # dictionary: Define set of element types
 ElementTypes = {0:'UNDEFINED',
