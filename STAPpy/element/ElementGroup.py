@@ -56,13 +56,16 @@ class CElementGroup(object):
 		return self._ElementList[item]
 
 	def GetMaterial(self, index):
-		"""
-		Return index-th material in this element group
-
-		:param index: material index
-		:return: (CMaterial)
-		"""
 		return self._MaterialList[index]
+
+	def GetElementType(self):
+		return self._ElementType
+
+	def GetNUME(self):
+		return self._NUME
+
+	def GetNUMMAT(self):
+		return self._NUMMAT
 
 	def AllocateElements(self, amount):
 		"""
@@ -71,7 +74,7 @@ class CElementGroup(object):
 		:param amount: (int) the amount of elements
 		:return:
 		"""
-		element_type = ElementTypes[self._ElementType]
+		element_type = ElementTypes.get(self._ElementType)
 		if element_type == 'Bar':
 			self._ElementList = [CBar() for _ in range(amount)]
 		elif element_type == 'Q4':
@@ -89,7 +92,7 @@ class CElementGroup(object):
 		:param amount: (int) the amount of material sets
 		:return: None
 		"""
-		element_type = ElementTypes[self._ElementType]
+		element_type = ElementTypes.get(self._ElementType)
 		if element_type == 'Bar':
 			self._MaterialList = [CBarMaterial() for _ in range(amount)]
 		elif element_type == 'Q4':
