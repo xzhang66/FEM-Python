@@ -43,10 +43,6 @@ class CBarMaterial(CMaterial):
 	def Read(self, input_file, mset):
 		"""
 		Read material data from stream Input
-
-		:param input_file: (_io.TextIOWrapper) the object of input file
-		:param mset: (int) the index number of material set to check the validness of input
-		:return: None
 		"""
 		line = input_file.readline().split()
 
@@ -63,9 +59,6 @@ class CBarMaterial(CMaterial):
 	def Write(self, output_file):
 		"""
 		Write material data to Stream
-
-		:param output_file: (_io.TextIOWrapper) the object of output file
-		:return: None
 		"""
 		material_info = "%5d%16.6e%16.6e\n"%(self.nset, self.E, self.Area)
 

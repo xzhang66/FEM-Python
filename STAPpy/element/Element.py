@@ -48,12 +48,18 @@ class CElement(metaclass=abc.ABCMeta):
 
 	@abc.abstractmethod
 	def GenerateLocationMatrix(self):
-		""" Generate location matrix: the global equation number that corresponding to each DOF of the element """
+		"""
+		Generate location matrix: the global equation number that
+		corresponding to each DOF of the element
+		"""
 		pass
 
 	@abc.abstractmethod
 	def ElementStiffness(self, stiffness):
-		""" Calculate element stiffness matrix (Upper triangular matrix, stored as an array column by colum) """
+		"""
+		Calculate element stiffness matrix
+		(Upper triangular matrix, stored as an array column by colum)
+		"""
 		pass
 
 	@abc.abstractmethod
@@ -79,5 +85,8 @@ class CElement(metaclass=abc.ABCMeta):
 
 	@abc.abstractmethod
 	def SizeOfStiffnessMatrix(self):
-		""" Return the size of the element stiffness matrix (stored as an array column by column) """
+		"""
+		Return the size of the element stiffness matrix
+		(stored as an array column by column)
+		"""
 		pass

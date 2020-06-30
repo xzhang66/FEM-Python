@@ -63,7 +63,8 @@ class CBar(CElement):
 		:return: None
 		"""
 		element_info = "%5d%11d%9d%12d\n"%(Ele+1, self._nodes[0].NodeNumber,
-										   self._nodes[1].NodeNumber, self._ElementMaterial.nset)
+										   self._nodes[1].NodeNumber,
+										   self._ElementMaterial.nset)
 
 		# print the element info on the screen
 		print(element_info, end='')
@@ -71,7 +72,10 @@ class CBar(CElement):
 		output_file.write(element_info)
 
 	def GenerateLocationMatrix(self):
-		""" Generate location matrix: the global equation number that corresponding to each DOF of the element """
+		"""
+		Generate location matrix: the global equation number that
+		corresponding to each DOF of the element
+		"""
 		i = 0
 		for N in range(self._NEN):
 			for D in range(3):
@@ -80,30 +84,30 @@ class CBar(CElement):
 
 	def SizeOfStiffnessMatrix(self):
 		"""
-		Return the size of the element stiffness matrix (stored as an array column by column)
-		For 2 node bar element, element stiffness is a 6x6 matrix, whose upper triangular part
-		has 21 elements
-		:return: (int) size of the element stiffness
+		Return the size of the element stiffness matrix
+		(stored as an array column by column)
+		For 2 node bar element, element stiffness is a 6x6 matrix,
+		whose upper triangular part has 21 elements
 		"""
 		return 21
 
 	def ElementStiffness(self, stiffness):
 		"""
 		Calculate element stiffness matrix
-		Upper triangular matrix, stored as an array column by colum starting from the diagonal element
-
-		:param stiffness: (np.array(21)) element stiffness matrix
-		:return: None
+		Upper triangular matrix, stored as an array column by colum
+		starting from the diagonal element
 		"""
 		for i in range(self.SizeOfStiffnessMatrix()):
 			stiffness[i] = 0.0
 
 		# Calculate bar length
-		DX = np.zeros(3) # dx = x2-x1, dy = y2-y1, dz = z2-z1
+		# dx = x2-x1, dy = y2-y1, dz = z2-z1
+		DX = np.zeros(3)
 		for i in range(3):
 			DX[i] = self._nodes[1].XYZ[i] - self._nodes[0].XYZ[i]
 
-		DX2 = np.zeros(6) # Quadratic polynomial (dx^2, dy^2, dz^2, dx*dy, dy*dz, dx*dz)
+		# Quadratic polynomial (dx^2, dy^2, dz^2, dx*dy, dy*dz, dx*dz)
+		DX2 = np.zeros(6)
 		DX2[0] = DX[0] * DX[0]
 		DX2[1] = DX[1] * DX[1]
 		DX2[2] = DX[2] * DX[2]
@@ -144,10 +148,6 @@ class CBar(CElement):
 	def ElementStress(self, stress, displacement):
 		"""
 		Calculate element stress
-
-		:param stress: (np.array(1)) element stress for Bar element
-		:param displacement: (np.array(Domain.NEQ)) the result of displacement
-		:return: None
 		"""
 		material = self._ElementMaterial
 

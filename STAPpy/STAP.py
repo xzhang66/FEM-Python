@@ -41,7 +41,8 @@ if __name__ == "__main__":
 		if filename[found:] == ".dat":
 			filename = filename[:found]
 		else:
-			print("*** Error *** Invalid file extension: {}".format(filename[found+1:]))
+			print("*** Error *** Invalid file extension: {}".format(
+				filename[found+1:]))
 			exit(1)
 
 	input_filename = filename + ".dat"
@@ -101,6 +102,7 @@ if __name__ == "__main__":
 				"     TIME FOR CALCULATION OF STIFFNESS MATRIX = {}\n" \
 				"     TIME FOR FACTORIZATION AND LOAD CASE SOLUTIONS = {}\n" \
 				"     T O T A L   S O L U T I O N   T I M E = {}\n".format(
-		time_input, time_assemble - time_input, time_solution - time_assemble, time_stress
+		time_input, time_assemble - time_input,
+		time_solution - time_assemble, time_stress
 	)
 	Output.OutputSolutionTime(time_info)

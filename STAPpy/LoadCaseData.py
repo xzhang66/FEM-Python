@@ -65,6 +65,7 @@ class CLoadCaseData(object):
 		:return: None
 		"""
 		for i in range(self.nloads):
-			load_info = "%7d%13d%19.6e\n"%(self.node[i], self.dof[i], self.load[i])
+			load_info = "%7d%13d%19.6e\n"%(self.node[i], self.dof[i],
+										   self.load[i])
 			print(load_info, end="")
 			output_file.write(load_info)

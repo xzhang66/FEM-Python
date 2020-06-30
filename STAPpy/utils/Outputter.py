@@ -77,12 +77,12 @@ class COutputter(object):
 		NLCASE = FEMData.GetNLCASE()
 		MODEX = FEMData.GetMODEX()
 
-		pre_info = "      NUMBER OF NODAL POINTS . . . . . . . . . . (NUMNP)  =%6d\n" \
-				   "      NUMBER OF ELEMENT GROUPS . . . . . . . . . (NUMEG)  =%6d\n" \
-				   "      NUMBER OF LOAD CASES . . . . . . . . . . . (NLCASE) =%6d\n" \
-				   "      SOLUTION MODE  . . . . . . . . . . . . . . (MODEX)  =%6d\n" \
-				   "         EQ.0, DATA CHECK\n" \
-				   "         EQ.1, EXECUTION\n\n"%(NUMNP, NUMEG, NLCASE, MODEX)
+		pre_info = "\t  NUMBER OF NODAL POINTS . . . . . . . . . . (NUMNP)  =%6d\n" \
+				   "\t  NUMBER OF ELEMENT GROUPS . . . . . . . . . (NUMEG)  =%6d\n" \
+				   "\t  NUMBER OF LOAD CASES . . . . . . . . . . . (NLCASE) =%6d\n" \
+				   "\t  SOLUTION MODE  . . . . . . . . . . . . . . (MODEX)  =%6d\n" \
+				   "\t\t EQ.0, DATA CHECK\n" \
+				   "\t\t EQ.1, EXECUTION\n\n"%(NUMNP, NUMEG, NLCASE, MODEX)
 		print(pre_info, end="")
 		self._output_file.write(pre_info)
 
@@ -140,7 +140,8 @@ class COutputter(object):
 					   "     EQ.1, TRUSS ELEMENTS\n" \
 					   "     EQ.2, ELEMENTS CURRENTLY\n" \
 					   "     EQ.3, NOT AVAILABLE\n\n" \
-					   " NUMBER OF ELEMENTS. . . . . . . . . . .( NPAR(2) ) . . =%5d\n\n"%(ElementType, NUME)
+					   " NUMBER OF ELEMENTS. . . . . . . . . . .( NPAR(2) ) . . =%5d\n\n" \
+					   %(ElementType, NUME)
 			print(pre_info, end="")
 			self._output_file.write(pre_info)
 
@@ -152,7 +153,8 @@ class COutputter(object):
 				# ...
 				pass  # comment or delete this line after implementation
 			else:
-				error_info = "\n*** Error *** Elment type {} has not been implemented.\n\n".format(ElementType)
+				error_info = "\n*** Error *** Elment type {} has not been " \
+							 "implemented.\n\n".format(ElementType)
 				raise ValueError(error_info)
 
 	def PrintBarElementData(self, EleGrp):
@@ -200,7 +202,8 @@ class COutputter(object):
 					   "     LOAD CASE NUMBER . . . . . . . =%6d\n" \
 					   "     NUMBER OF CONCENTRATED LOADS . =%6d\n\n" \
 					   "    NODE       DIRECTION      LOAD\n" \
-					   "   NUMBER                   MAGNITUDE\n"%(lcase + 1, LoadData.nloads)
+					   "   NUMBER                   MAGNITUDE\n"%(lcase + 1,
+																  LoadData.nloads)
 			print(pre_info, end="")
 			self._output_file.write(pre_info)
 
@@ -218,7 +221,8 @@ class COutputter(object):
 
 		pre_info = " LOAD CASE%5d\n\n\n" \
 				   " D I S P L A C E M E N T S\n\n" \
-				   "  NODE           X-DISPLACEMENT    Y-DISPLACEMENT    Z-DISPLACEMENT\n"%(lcase+1)
+				   "  NODE           X-DISPLACEMENT    Y-DISPLACEMENT    Z-DISPLACEMENT\n" \
+				   %(lcase+1)
 		print(pre_info, end="")
 		self._output_file.write(pre_info)
 
@@ -238,7 +242,8 @@ class COutputter(object):
 		NUMEG = FEMData.GetNUMEG()
 
 		for ELeGrpIndex in range(NUMEG):
-			pre_info = " S T R E S S  C A L C U L A T I O N S  F O R  E L E M E N T  G R O U P%5d\n\n"%(ELeGrpIndex+1)
+			pre_info = " S T R E S S  C A L C U L A T I O N S  F O R  E L E M E N T  G R O U P%5d\n\n" \
+					   %(ELeGrpIndex+1)
 			print(pre_info, end="")
 			self._output_file.write(pre_info)
 
@@ -268,7 +273,8 @@ class COutputter(object):
 				# ...
 				pass  # comment or delete this line after implementation
 			else:
-				error_info = "\n*** Error *** Elment type {} has not been implemented.\n\n".format(ElementType)
+				error_info = "\n*** Error *** Elment type {} has not been " \
+							 "implemented.\n\n".format(ElementType)
 				raise ValueError(error_info)
 
 	def OutputTotalSystemData(self):
