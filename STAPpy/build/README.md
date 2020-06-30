@@ -30,7 +30,9 @@ This file is used to teach you how to build the project of STAPpy from .py files
         PS your_path\FEM-Python\STAPpy\build> pyinstaller -F ../STAP.py -p ../element -p ../solver -p ../utils --hidden-import ../Domain.py --hidden-import ../LoadCaseData.py
     
     -F: Create a one-file bundled executable
+    
     -p DIR: A path to search for imports (like using PYTHONPATH). Multiple paths are allowed, separated by ';', or use this option multiple times
+    
     --hidden-import MODULENAME: Name an import not visible in the code of the scripts(s). This option can be used multiple times.
 
     If you create new folder(s) or new file(s) under folder "./STAPpy/", then you need to modify the above command.
