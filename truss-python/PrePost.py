@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Provide methods to setup LM matrices, create FE model for a truss from a json file, 
-to plot the truss, to calculate and print stresses of every element.
+Provide methods to setup LM matrices, create FE model for a truss from a json 
+file, to plot the truss, to calculate and print stresses of every element.
 
 Created on Sat May 9 15:43:00 2020
 
@@ -15,63 +15,7 @@ import json
 import matplotlib.pyplot as plt
 
 
-def set_LM():
-    '''
-    set up Local Matrix
-    '''
-    for e in range(model.nel):
-        for j in range(model.nen):
-            for m in range(model.ndof):
-                ind = j*model.ndof + m
-                model.LM[ind, e] = model.ndof*(model.IEN[e, j] - 1) + m
-
-
-def plottruss():
-    '''
-    plot the truss
-    '''
-    if model.plot_truss == "yes":
-        if model.ndof == 1:
-            for i in range(model.nel):
-                XX = np.array([model.x[model.IEN[i, 0]-1], model.x[model.IEN[i, 1]-1]])
-                YY = np.array([0.0, 0.0])
-                # you can change the Args for the function plt.plot(...) to draw a stress contour
-                # of every element; hint: use colormap.
-                plt.plot(XX, YY, "blue")
-
-                if model.plot_node == "yes":
-                    plt.text(XX[0], YY[0], str(model.IEN[i, 0]))
-                    plt.text(XX[1], YY[1], str(model.IEN[i, 1]))
-        elif model.ndof == 2:
-            for i in range(model.nel):
-                XX = np.array([model.x[model.IEN[i, 0]-1], model.x[model.IEN[i, 1]-1]])
-                YY = np.array([model.y[model.IEN[i, 0]-1], model.y[model.IEN[i, 1]-1]])
-                # you can change the Args for the function plt.plot(...) to draw a stress contour
-                # of every element; hint: use colormap.
-                plt.plot(XX, YY, "blue")
-
-                if model.plot_node == "yes":
-                    plt.text(XX[0], YY[0], str(model.IEN[i, 0]))
-                    plt.text(XX[1], YY[1], str(model.IEN[i, 1]))
-        elif model.ndof == 3:
-            # insert your code here for 3-Dimension
-            # ...
-            pass # delete or comment this line after your implementation for 3-Dimension
-        else:
-            raise ValueError("The dimension (ndof = {0}) given for the plottruss is invalid".format(model.ndof))
-        
-        plt.title("Truss Plot")
-        plt.savefig("./truss.png")
-        plt.show()
-    
-    print("\t2D Truss Params \n")
-    print(model.Title + "\n")
-    print("No. of Elements  {0}".format(model.nel))
-    print("No. of Nodes     {0}".format(model.nnp))
-    print("No. of Equations {0}".format(model.neq))
-
-
-def create_model_jason(DataFile):
+def create_model_json(DataFile):
     """ 
     Initialize the FEM model from file DataFile (in json format)
     """
@@ -104,8 +48,10 @@ def create_model_jason(DataFile):
     # element and material data (given at the element)
     model.E     = np.array(FEData['E'])
     model.CArea = np.array(FEData['CArea'])
-    model.leng  = np.sqrt(np.power(model.x[model.IEN[:, 1]-1] - model.x[model.IEN[:, 0]-1], 2) +
-                          np.power(model.y[model.IEN[:, 1]-1] - model.y[model.IEN[:, 0]-1], 2))
+    model.leng  = np.sqrt(np.power(model.x[model.IEN[:, 1]-1] - 
+                                   model.x[model.IEN[:, 0]-1], 2) +
+                          np.power(model.y[model.IEN[:, 1]-1] - 
+                                   model.y[model.IEN[:, 0]-1], 2))
     model.stress= np.zeros((model.nel,))
 
     # prescribed forces
@@ -121,12 +67,75 @@ def create_model_jason(DataFile):
     plottruss()
 
 
-def disp_and_stress():
+def set_LM():
     '''
-    Task1: calculate and print stresses of every element
-    Task2: plot the truss after deformation (need to be implemented by students as homework)
+    set up Location Matrix
     '''
-    # Task1
+    for e in range(model.nel):
+        for j in range(model.nen):
+            for m in range(model.ndof):
+                ind = j*model.ndof + m
+                model.LM[ind, e] = model.ndof*(model.IEN[e, j] - 1) + m
+
+
+def plottruss():
+    '''
+    plot the truss
+    '''
+    if model.plot_truss == "yes":
+        if model.ndof == 1:
+            for i in range(model.nel):
+                XX = np.array([model.x[model.IEN[i, 0]-1], 
+                               model.x[model.IEN[i, 1]-1]])
+                YY = np.array([0.0, 0.0])
+                plt.plot(XX, YY, "blue")
+
+                if model.plot_node == "yes":
+                    plt.text(XX[0], YY[0], str(model.IEN[i, 0]))
+                    plt.text(XX[1], YY[1], str(model.IEN[i, 1]))
+        elif model.ndof == 2:
+            for i in range(model.nel):
+                XX = np.array([model.x[model.IEN[i, 0]-1], 
+                               model.x[model.IEN[i, 1]-1]])
+                YY = np.array([model.y[model.IEN[i, 0]-1], 
+                               model.y[model.IEN[i, 1]-1]])
+                plt.plot(XX, YY, "blue")
+
+                if model.plot_node == "yes":
+                    plt.text(XX[0], YY[0], str(model.IEN[i, 0]))
+                    plt.text(XX[1], YY[1], str(model.IEN[i, 1]))
+        elif model.ndof == 3:
+            # insert your code here for 3D
+            # ...
+            pass # delete or comment this line after your implementation for 3D
+        else:
+            raise ValueError("The dimension (ndof = {0}) given for the \
+                             plottruss is invalid".format(model.ndof))
+        
+        plt.title("Truss Plot")
+        plt.xlabel(r"$x$")
+        plt.ylabel(r"$y$")
+        plt.savefig("truss.pdf")
+
+        # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
+        # which can be added into your LaTex source code by "\input{fe_plot.tex}"
+        if model.plot_tex == "yes":
+            import tikzplotlib
+            tikzplotlib.clean_figure()
+            tikzplotlib.save("fe_plot.tex")
+    
+    print("\t2D Truss Params \n")
+    print(model.Title + "\n")
+    print("No. of Elements  {0}".format(model.nel))
+    print("No. of Nodes     {0}".format(model.nnp))
+    print("No. of Equations {0}".format(model.neq))
+
+
+def print_stress():
+    '''
+    Calculate and print stresses of every element
+    '''
+
     # prints the element number and corresponding stresses
     print("Element\t\t\tStress")
     # Compute stress for each element
@@ -144,15 +153,12 @@ def disp_and_stress():
             c = (xe[1] - xe[0])/model.leng[e]
             model.stress[e] = const*(np.array([-c, -s, c, s])@de)
         elif model.ndof == 3:
-            # insert your code here for 3-Dimension
+            # insert your code here for 3D
             # ...
-            pass # delete or comment this line after your implementation for 3-Dimension
+            pass # delete or comment this line after your implementation for 3D
         else:
-            raise ValueError("The dimension (ndof = {0}) given for the problem is invalid".format(model.ndof))
+            raise ValueError("The dimension (ndof = {0}) given for the \
+                             problem is invalid".format(model.ndof))
 
         print("{0}\t\t\t{1}".format(e+1, model.stress[e]))
-    
-    # Task2
-    # plot the truss after deformation
-    # insert your code here and you maybe need to modify the function: plottruss()
-    # ...
+        

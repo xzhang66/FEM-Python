@@ -3,7 +3,7 @@
 """
 Truss - truss FE analysis program.
   Element types  : 1-, 2- or 3-dimension linear bar element.
-  Problem solved : truss whose Young's modulus, cross-sectinal area are known within each element
+  Problem solved : truss whose Young's modulus, cross-sectional area are known within each element
     is deformed at nodal forces.
 
 Usage:
@@ -19,13 +19,12 @@ Created on Sat May 9 18:34:00 2020
 from sys import argv,exit
 import FEData as model
 from TrussElem import TrussElem
-from PrePost import create_model_jason, disp_and_stress
+from PrePost import create_model_json, print_stress
 from utitls import assembly, solvedr
 
 def FERun(DataFile):
     # create FE model from DataFile in json format
-    # create_model_json('Convergence/16-elements-3Q.json')
-    create_model_jason(DataFile)
+    create_model_json(DataFile)
 
     # Element matrix computations and assembly
     for e in range(model.nel):
@@ -36,7 +35,7 @@ def FERun(DataFile):
     solvedr()
 
     # Postprocessing
-    disp_and_stress()
+    print_stress()
 
 
 if __name__ == "__main__":
@@ -47,5 +46,4 @@ if __name__ == "__main__":
         print("Usage ： Truss file_name")
         exit()
 
-    #DataFile = "./truss_2_8.json"
     FERun(DataFile)

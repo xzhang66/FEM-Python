@@ -43,10 +43,11 @@ def TrussElem(e):
                              [-c_c, -c_s, c_c, c_s],
                              [-c_s, -s_s, c_s, s_s]])
     elif model.ndof == 3:
-        # insert your code here for 3-Dimension
+        # insert your code here for 3D
         # ...
-        pass # delete or comment this line after your implementation for 3-Dimension
+        pass # delete or comment this line after your implementation for 3D
     else:
-        raise ValueError("The dimension (ndof = {0}) given for the problem is invalid".format(model.ndof))
+        raise ValueError("The dimension (ndof = {0}) given for the problem \
+                         is invalid".format(model.ndof))
     
     return ke

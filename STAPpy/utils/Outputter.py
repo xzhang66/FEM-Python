@@ -19,7 +19,8 @@ from element.ElementGroup import ElementTypes
 import datetime
 import numpy as np
 
-weekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+weekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
+           "Saturday", "Sunday"]
 month = ["January", "February", "March", "April", "May", "June",
 		 "July", "August", "September", "October", "November", "December"]
 
