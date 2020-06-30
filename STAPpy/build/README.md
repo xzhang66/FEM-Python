@@ -1,3 +1,4 @@
+```cpp
 /*****************************************************************************/
 /*  STAPpy : A python FEM code sharing the same input data file with STAP90  */
 /*     Computational Dynamics Laboratory                                     */
@@ -8,6 +9,7 @@
 /*     @author: thurcni@163.com, xzhang@tsinghua.edu.cn                      */
 /*     http://www.comdyn.cn/                                                 */
 /*****************************************************************************/
+```
 
 This file is used to teach you how to build the project of STAPpy from .py files to a .exe file
 
