@@ -20,6 +20,7 @@ class CSkylineMatrix(object):
 	""" CSkylineMatrix class is used to store the FEM stiffness matrix in skyline storage """
 	def __init__(self, N):
 		super().__init__()
+        
 		# Dimension of the stiffness matrix
 		self._NEQ = N
 
@@ -54,7 +55,6 @@ class CSkylineMatrix(object):
 	def Allocate(self):
 		""" Allocate storage for the matrix """
 		self._NWK = self._DiagonalAddress[self._NEQ] - self._DiagonalAddress[0]
-
 		self._data = np.zeros(self._NWK, dtype=np.double)
 
 	def GetColumnHeights(self):
