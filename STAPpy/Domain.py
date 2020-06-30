@@ -70,8 +70,8 @@ class Domain(object):
 		self.Force = None
 
 		# Banded stiffness matrix
-		# A one-dimensional array storing only the elements below the	skyline of the
-		# global stiffness matrix.
+		# A one-dimensional array storing only the elements below the
+		# skyline of the global stiffness matrix.
 		self.StiffnessMatrix = None
 
 	def GetMODEX(self):
@@ -172,7 +172,10 @@ class Domain(object):
 		return True
 
 	def CalculateEquationNumber(self):
-		""" Calculate global equation numbers corresponding to every degree of freedom of each node"""
+		"""
+		Calculate global equation numbers corresponding to every
+		degree of freedom of each node
+		"""
 		self.NEQ = 0
 
 		for np in range(self.NUMNP):
@@ -217,7 +220,8 @@ class Domain(object):
 
 				Element.GenerateLocationMatrix()
 
-				self.StiffnessMatrix.CalculateColumnHeight(Element.GetLocationMatrix(), Element.GetND())
+				self.StiffnessMatrix.CalculateColumnHeight(
+					Element.GetLocationMatrix(), Element.GetND())
 
 		self.StiffnessMatrix.CalculateMaximumHalfBandwidth()
 
@@ -234,7 +238,8 @@ class Domain(object):
 			for Ele in range(NUME):
 				Element = ElementGrp[Ele]
 				Element.ElementStiffness(Matrix)
-				self.StiffnessMatrix.Assembly(Matrix, Element.GetLocationMatrix(), Element.GetND())
+				self.StiffnessMatrix.Assembly(Matrix,
+					Element.GetLocationMatrix(), Element.GetND())
 
 			del Matrix
 
@@ -247,7 +252,7 @@ class Domain(object):
 
 		# Loop over for all concentrated loads in load case LoadCase
 		for lnum in range(LoadData.nloads):
-			dof = self.NodeList[LoadData.node[lnum] - 1].bcode[LoadData.dof[lnum] - 1]
+			dof = self.NodeList[LoadData.node[lnum]-1].bcode[LoadData.dof[lnum]-1]
 
 			if dof:
 				self.Force[dof - 1] += LoadData.load[lnum]
@@ -256,8 +261,9 @@ class Domain(object):
 
 	def AllocateMatrices(self):
 		"""
-		Allocate storage for matrices Force, ColumnHeights, DiagonalAddress and StiffnessMatrix
-		and calculate the column heights and address of diagonal elements
+		Allocate storage for matrices Force, ColumnHeights, DiagonalAddress
+		and StiffnessMatrix and calculate the column heights and address
+		of diagonal elements
 		"""
 		# Allocate for global force/displacement vector
 		self.Force = np.zeros(self.NEQ, dtype=np.double)

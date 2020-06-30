@@ -17,7 +17,10 @@ import sys
 
 
 class CSkylineMatrix(object):
-	""" CSkylineMatrix class is used to store the FEM stiffness matrix in skyline storage """
+	"""
+	CSkylineMatrix class is used to store the FEM stiffness matrix
+	in skyline storage
+	"""
 	def __init__(self, N):
 		super().__init__()
         
@@ -74,11 +77,16 @@ class CSkylineMatrix(object):
 		return self._NEQ
 
 	def size(self):
-		""" Return the size of the storage used to store the stiffness matrkix in skyline """
+		"""
+		Return the size of the storage used to store the stiffness matrkix
+		in skyline
+		"""
 		return self._NWK
 
 	def CalculateColumnHeight(self, LocationMatrix, ND):
-		""" Calculate the column height, used with the skyline storage scheme """
+		"""
+		Calculate the column height, used with the skyline storage scheme
+		"""
 		# Look for the row number of the first non-zero element
 		nfisrtrow = sys.maxsize
 		for i in range(ND):
@@ -100,18 +108,23 @@ class CSkylineMatrix(object):
 		self._MK = self._ColumnHeights.max() + 1
 
 	def Assembly(self, Matrix, LocationMatrix, ND):
-		""" Assemble the banded global stiffness matrix (skyline storage scheme) """
+		"""
+		Assemble the banded global stiffness matrix (skyline storage scheme)
+		"""
 		# Assemble global stiffness matrix
 		for j in range(ND):
-			Lj = LocationMatrix[j]			# Global equation number corresponding to jth DOF of the element
+			# Global equation number corresponding to jth DOF of the element
+			Lj = LocationMatrix[j]
 			if not Lj:
 				continue
 
-			# Address of diagonal element of column j in the one dimensional element stiffness matrix
+			# Address of diagonal element of column j
+			# in the one dimensional element stiffness matrix
 			DiagjElement = int((j + 1)*j/2 + 1)
 
 			for i in range(j + 1):
-				Li = LocationMatrix[i]		# Global equation number corresponding to ith DOF of the element
+				# Global equation number corresponding to ith DOF of the element
+				Li = LocationMatrix[i]
 				if not Li:
 					continue
 
@@ -127,4 +140,5 @@ class CSkylineMatrix(object):
 		"""
 		self._DiagonalAddress[0] = 1
 		for col in range(1, self._NEQ+1):
-			self._DiagonalAddress[col] = self._DiagonalAddress[col - 1] + self._ColumnHeights[col - 1] + 1
+			self._DiagonalAddress[col] = self._DiagonalAddress[col - 1] \
+										 + self._ColumnHeights[col - 1] + 1

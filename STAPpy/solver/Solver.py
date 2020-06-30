@@ -17,7 +17,8 @@ import abc
 
 class CSolver(metaclass=abc.ABCMeta):
 	"""
-	Interface class for all the solver. New solver based on LDLT factorization should be derived from this base class.
+	Interface class for all the solver. New solver based on LDLT factorization
+	should be derived from this base class.
 	This class defines the common methods in these solvers.
 	"""
 	@abc.abstractmethod

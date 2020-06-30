@@ -82,7 +82,8 @@ class CElementGroup(object):
 			# ...
 			pass # comment or delete this line after implementation
 		else:
-			error_info = "\nType {} not available. See CElementGroup.AllocateElement.".format(self._ElementType)
+			error_info = "\nType {} not available. See CElementGroup." \
+						 "AllocateElement.".format(self._ElementType)
 			raise ValueError(error_info)
 
 	def AllocateMaterials(self, amount):
@@ -100,7 +101,8 @@ class CElementGroup(object):
 			# ...
 			pass # comment or delete this line after implementation
 		else:
-			error_info = "\nType {} not available. See CElementGroup.AllocateMaterials.".format(self._ElementType)
+			error_info = "\nType {} not available. See CElementGroup." \
+						 "AllocateMaterials.".format(self._ElementType)
 			raise ValueError(error_info)
 
 	def Read(self, input_file):
