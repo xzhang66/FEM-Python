@@ -45,21 +45,21 @@ class CLDLTSolver(CSolver):
 				C = np.double(0.0)
 				for r in range(max(mi, mj), i):
 					# C += L_ri * U_rj
-					C += (self.K[self.K.Index(r, i)]*self.K[self.K.Index(r, j)])
+					C += (self.K[r, i]*self.K[r, j])
 
-				self.K[self.K.Index(i, j)] -= C		# U_ij = K_ij - C
+				self.K[i, j] -= C		# U_ij = K_ij - C
 
 			for r in range(mj, j):		# Loop for mj:j-1 (column j)
 				# L_rj = U_rj / D_rr
-				Lrj = self.K[self.K.Index(r, j)]/self.K[self.K.Index(r, r)]
+				Lrj = self.K[r, j]/self.K[r, r]
 				# D_jj = K_jj - sum(L_rj*U_rj, r=mj:j-1)
-				self.K[self.K.Index(j, j)] -= (Lrj*self.K[self.K.Index(r, j)])
-				self.K[self.K.Index(r, j)] = Lrj
+				self.K[j, j] -= (Lrj*self.K[r, j])
+				self.K[r, j] = Lrj
 
-			if np.fabs(self.K[self.K.Index(j, j)] <= sys.float_info.min):
+			if np.fabs(self.K[j, j] <= sys.float_info.min):
 				error_info = "\n*** Error *** Stiffness matrix is not positive definite !" \
 							 "\n    Euqation no = {}" \
-							 "\n    Pivot = {}".format(j, self.K[self.K.Index(j, j)])
+							 "\n    Pivot = {}".format(j, self.K[j, j])
 				raise ValueError(error_info)
 
 	def BackSubstitution(self, Force):
@@ -73,16 +73,16 @@ class CLDLTSolver(CSolver):
 
 			for j in range(mi, i): # Loop for j=mi:i-1
 				# V_i = R_i - sum_j (L_ji V_j)
-				Force[i - 1] -= (self.K[self.K.Index(j, i)]*Force[j - 1])
+				Force[i - 1] -= (self.K[j, i]*Force[j - 1])
 
 		# Back substitute (Vbar = D^(-1) V, L^T a = Vbar)
 		for i in range(1, N+1): # Loop for i=1:N
 			# Vbar = D^(-1) V
-			Force[i - 1] /= self.K[self.K.Index(i, i)]
+			Force[i - 1] /= self.K[i, i]
 
 		for j in range(N, 1, -1): # Loop for j=N:2
 			mj = j - ColumnHeights[j - 1]
 
 			for i in range(mj, j): # Loop for i=mj:j-1
 				# a_i = Vbar_i - sum_j(L_ij Vbar_j)
-				Force[i - 1] -= (self.K[self.K.Index(i, j)]*Force[j - 1])
+				Force[i - 1] -= (self.K[i, j]*Force[j - 1])
