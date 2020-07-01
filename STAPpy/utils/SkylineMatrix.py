@@ -49,11 +49,15 @@ class CSkylineMatrix(object):
 		else:
 			return self._DiagonalAddress[i - 1] + (i - j) - 1
 
-	def __getitem__(self, item):
-		return self._data[item]
+	def __getitem__(self, *item):
+		(i, j), =item
+		index = self.Index(i, j)
+		return self._data[index]
 
-	def __setitem__(self, key, value):
-		self._data[key] = value
+	def __setitem__(self, *item):
+		(i, j), value = item
+		index = self.Index(i, j)
+		self._data[index] = value
 
 	def Allocate(self):
 		""" Allocate storage for the matrix """
