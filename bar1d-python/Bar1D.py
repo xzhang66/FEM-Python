@@ -13,7 +13,7 @@ Command line arguments:
   file_name: File name in which the FE model is stored in json format
   BarType  : Optinal. Plot the exact solution of the problem defined by BarType
     TaperedBar: The tapered elastic bar given in Example 5.2 in Fish's textbook
-    CompressionmBar: The bar under compression in Figure 5.13 in Fish's textbook
+    CompressionBar: The bar under compression in Figure 5.13 in Fish's textbook
 
 Created on Sun Apr 24 18:56:57 2020
 
