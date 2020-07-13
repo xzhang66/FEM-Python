@@ -183,6 +183,7 @@ def postprocess():
 		if model.plot_tex == "yes":
 			tikzplotlib.save("elasticity-mesh.pgf")
             
+		plt.savefig("elasticity-mesh.pdf")
 		plt.show()
 
 	# Compute strains and stresses at gauss points
@@ -349,6 +350,7 @@ def stress_contours():
 		if model.plot_tex == "yes":
 			tikzplotlib.save("elasticity-sxx.pgf")
 
+		plt.savefig("elasticity-sxx.pdf")
 		plt.show()
 
 	if model.plot_mises == 'yes':
@@ -392,6 +394,7 @@ def stress_contours():
 		# Convert matplotlib figures into PGFPlots figures
 		if model.plot_tex == "yes":
 			tikzplotlib.save("elasticity-mises.pgf")
-            
+
+		plt.savefig("elasticity-mises.pdf")
 		plt.show()
             
