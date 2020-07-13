@@ -42,5 +42,6 @@
 	"compute_stress": "yes", 
 	"plot_stress_xx": "yes", 
 	"plot_mises": "yes", 
+	"plot_tex": "yes",
 	"fact": "9.221e3"
 }
