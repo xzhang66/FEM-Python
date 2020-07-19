@@ -132,7 +132,7 @@ def BarElem(e):
     for i in range(model.np):   # loop over all point forces
         Pi = model.P[i]    # extract point force
         xpi = model.xp[i]   # extract the location of point force within an element
-        if xe[0] <= xpi & xpi < xe[-1]:
+        if xe[0] <= xpi < xe[-1]:
             # add to the nodal force vector
             fe = fe + Pi*np.transpose(Nmatrix1D(xpi,xe))   
 
