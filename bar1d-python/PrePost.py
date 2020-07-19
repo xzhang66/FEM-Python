@@ -17,7 +17,7 @@ import tikzplotlib
 
 import FEData as model
 from utitls import gauss
-from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar
+from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar, ExactSolution_ConcentratedForce
 from Bar1DElem import setup_ID_LM, Nmatrix1D, Bmatrix1D
 
 
@@ -204,6 +204,8 @@ def postprocessor(BarType):
         ExactSolution_TaperedBar(ax1,ax2)
     elif BarType == "CompressionBar":
         ExactSolution_CompressionBar(ax1,ax2)
+    elif BarType == "ConcentratedForce":
+        ExactSolution_ConcentratedForce(ax1, ax2)
     elif BarType != None:
         print('Exact solution for %s is not available'%(BarType))
 

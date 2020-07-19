@@ -98,6 +98,5 @@ print("    Quadratic element : ||e||_en = %g h^%g\n" %(C, a))
 
 # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
 # which can be added into your LaTex source code by "\input{fe_plot.tex}"
-#import tikzplotlib
-#tikzplotlib.save("fe_convergence.tex")
-plt.show()
+import tikzplotlib
+tikzplotlib.save("fe_convergence.tex")
