@@ -35,21 +35,21 @@ def ExactSolution_TaperedBar(ax1, ax2):
     xb = np.arange(5,6,0.01)
          
     # exact displacement for xa 
-    c1 = 72;  c2 = 1 - (c1/16)*log(2); 
-    u1 = -.5*xa + (c1/16)*np.log(xa) + c2; 
+    c1 = 72;  c2 = 1 - (c1/16)*log(2)
+    u1 = -.5*xa + (c1/16)*np.log(xa) + c2
     
     # exact displacement for xb 
-    c3 = 48;  c4 = log(5)/16*(c1-c3) + c2; 
-    u2 = -.5*xb + (c3/16)*np.log(xb) + c4; 
+    c3 = 48;  c4 = log(5)/16*(c1-c3) + c2
+    u2 = -.5*xb + (c3/16)*np.log(xb) + c4
     
     # plot displacement 
     ax1.plot(np.append(xa,xb),np.append(u1,u2), '--r', label='Exact')
      
     # exact stress for xa 
-    ya = (36-4*xa)/xa;    
+    ya = (36-4*xa)/xa
     
     # exact stress for xb 
-    yb = (24-4*xb)/xb;    
+    yb = (24-4*xb)/xb
     
     # plot stress 
     ax2.plot(np.append(xa,xb),np.append(ya,yb), '--r', label='Exact')
@@ -71,14 +71,15 @@ def ExactSolution_CompressionBar(ax1, ax2):
     ue = (-xx**3/6 + xx)/Ee 
     
     # plot displacement 
-    ax1.plot(xx, ue, '--r',  label='Exact');
+    ax1.plot(xx, ue, '--r',  label='Exact')
     
     # exact stress
     stre = (-xx**2/2 + 1)
     
     # plot stress 
-    ax2.plot(xx,stre, '--r', label='Exact');
-    
+    ax2.plot(xx,stre, '--r', label='Exact')
+
+
 def ErrorNorm_CompressionBar():
     """ 
     Calculate and print the error norm (L2 and energy norm) of the elastic 
@@ -86,7 +87,7 @@ def ErrorNorm_CompressionBar():
     """
     
     ngp = 3
-    [w, gp] = gauss(ngp);    # extract Gauss points and weights
+    [w, gp] = gauss(ngp)    # extract Gauss points and weights
     
     L2Norm = 0
     EnNorm = 0
@@ -112,7 +113,7 @@ def ErrorNorm_CompressionBar():
             uh  = N@de               # displacement at gauss point
             uex = (-xt**3/6 + xt)/Ee # Exact displacement
             L2Norm += J*w[i]*(uex - uh)**2
-            L2NormEx += J*w[i]*(uex)**2;
+            L2NormEx += J*w[i]*(uex)**2
             
             sh  = B@de               # strain at Gauss points
             sex = (-xt**2/2 + 1)/Ee  # Exact strain

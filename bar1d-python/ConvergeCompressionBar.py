@@ -33,7 +33,7 @@ h2 = np.zeros(n2L)
 L2Norm2 = np.zeros(n2L)
 EnNorm2 = np.zeros(n2L)
 for i in range(n2L):
-    FERun("Convergence/"+files_2L[i],"CompressionBar")
+    FERun("Convergence/CompressionBar/"+files_2L[i],"CompressionBar")
 
     # Calculate error norms for convergence study
     h2[i], L2Norm2[i], EnNorm2[i] = ErrorNorm_CompressionBar()
@@ -44,7 +44,7 @@ h3 = np.zeros(n3Q)
 L2Norm3 = np.zeros(n3Q)
 EnNorm3 = np.zeros(n3Q)
 for i in range(n3Q):
-    FERun("Convergence/"+files_3Q[i],"CompressionBar")
+    FERun("Convergence/CompressionBar/"+files_3Q[i],"CompressionBar")
 
     # Calculate error norms for convergence study of the bar under ccompression
     h3[i], L2Norm3[i], EnNorm3[i] = ErrorNorm_CompressionBar()
@@ -98,5 +98,6 @@ print("    Quadratic element : ||e||_en = %g h^%g\n" %(C, a))
 
 # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
 # which can be added into your LaTex source code by "\input{fe_plot.tex}"
-import tikzplotlib
-tikzplotlib.save("fe_convergence.tex")
+#import tikzplotlib
+#tikzplotlib.save("fe_convergence.tex")
+plt.show()
