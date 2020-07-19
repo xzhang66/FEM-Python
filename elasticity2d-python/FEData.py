@@ -41,6 +41,7 @@ Global variables defining the FEM model
   plot_nod        : plot node number ?
   plot_stress_xx  : plot stress xx ?
   plot_mises      : plot mises stress ?
+  plot_tex        : plot in latex tikz format ?
   fact            : factor for scaled displacements plot
 """
 
@@ -88,4 +89,5 @@ plot_disp = None
 plot_nod = None
 plot_stress_xx = None
 plot_mises = None
+plot_tex = None
 fact = 1

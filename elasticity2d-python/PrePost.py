@@ -18,6 +18,7 @@ from utitls import gauss
 from Elast2DElem import NmatElast2D, BmatElast2D
 import matplotlib.colors
 import matplotlib.cm
+import tikzplotlib
 
 
 def create_model_json(DataFile):
@@ -91,6 +92,7 @@ def create_model_json(DataFile):
 	model.compute_stress = FEData['compute_stress']
 	model.plot_stress_xx = FEData['plot_stress_xx']
 	model.plot_mises = FEData['plot_mises']
+	model.plot_tex = FEData['plot_tex']
 	model.fact = np.double(FEData['fact'])
 
 	plot_mesh()
@@ -132,8 +134,8 @@ def plot_mesh():
 				plt.text(XX[3], YY[3], str(model.IEN[3, i]))
 
 		plt.title('Initial structure')
-		plt.xlabel('X')
-		plt.ylabel('Y')
+		plt.xlabel(r'$X$')
+		plt.ylabel(r'$Y$')
 
 	print('  Mesh Params ')
 	print('No. of Elements  {}'.format(model.nel))
@@ -177,6 +179,11 @@ def postprocess():
 	displacement()
 
 	if model.plot_mesh or model.plot_disp:
+        	# Convert matplotlib figures into PGFPlots figures
+		if model.plot_tex == "yes":
+			tikzplotlib.save("elasticity-mesh.pgf")
+            
+		plt.savefig("elasticity-mesh.pdf")
 		plt.show()
 
 	# Compute strains and stresses at gauss points
@@ -335,9 +342,15 @@ def stress_contours():
 			plt.plot(XX, YY, color='k')
 
 		plt.title(r'$\sigma_{xx}$ contours')
-		plt.xlabel('X')
-		plt.ylabel('Y')
+		plt.xlabel(r'$X$')
+		plt.ylabel(r'$Y$')
 		plt.colorbar(matplotlib.cm.ScalarMappable(norm=norm, cmap='jet'))
+
+        	# Convert matplotlib figures into PGFPlots figures
+		if model.plot_tex == "yes":
+			tikzplotlib.save("elasticity-sxx.pgf")
+
+		plt.savefig("elasticity-sxx.pdf")
 		plt.show()
 
 	if model.plot_mises == 'yes':
@@ -374,7 +387,14 @@ def stress_contours():
 			plt.plot(XX, YY, color='k')
 
 		plt.title(r'Von Mises $\sigma$ contours')
-		plt.xlabel('X')
-		plt.ylabel('Y')
+		plt.xlabel(r'$X$')
+		plt.ylabel(r'$Y$')
 		plt.colorbar(matplotlib.cm.ScalarMappable(norm=norm, cmap='jet'))
+        
+		# Convert matplotlib figures into PGFPlots figures
+		if model.plot_tex == "yes":
+			tikzplotlib.save("elasticity-mises.pgf")
+
+		plt.savefig("elasticity-mises.pdf")
 		plt.show()
+            
