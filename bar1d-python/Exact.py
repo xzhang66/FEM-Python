@@ -181,7 +181,7 @@ def ErrorNorm_ConcentratedForce(flag):
     Args:
         flag: (bool) whether x0 = 15*l/16 is the node or not
     """
-    ngp = 3
+    ngp = 4
     [w, gp] = gauss(ngp)  # extract Gauss points and weights
 
     E = 10000.0
