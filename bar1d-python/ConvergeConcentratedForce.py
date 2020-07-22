@@ -84,13 +84,13 @@ axs[1,1].plot(h_node,EnNorm_node)
 # Linear regression
 print("The L2/energy error norms are ")
 a, C = np.polyfit(np.log(h_even),np.log(L2Norm_even),1)
-print("    Concentrated force in an element    : ||e||_L2 = %g h^%g" %(np.e**C, a))
+print("    Concentrated force in an element    : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h_node),np.log(L2Norm_node),1)
-print("    Concentrated force on a node        : ||e||_L2 = %g h^%g" %(np.e**C, a))
+print("    Concentrated force on a node        : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h_even),np.log(EnNorm_even),1)
-print("    Concentrated force in an element    : ||e||_en = %g h^%g" %(np.e**C, a))
+print("    Concentrated force in an element    : ||e||_en = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h_node),np.log(EnNorm_node),1)
-print("    Concentrated force on a node        : ||e||_en = %g h^%g\n" %(np.e**C, a))
+print("    Concentrated force on a node        : ||e||_en = %e h^%g\n" %(np.e**C, a))
 
 # Convert matplotlib figures into PGFPlots figures stored in a Tikz file,
 # which can be added into your LaTex source code by "\input{fe_plot.tex}"
