@@ -66,7 +66,7 @@ def create_model_json(DataFile):
     # output plots
     model.plot_bar = FEData['plot_bar']
     model.plot_nod = FEData['plot_nod']
-    model.nplot = model.nnp*10
+    model.nplot = model.nen*10
     model.plot_tex = FEData['plot_tex']
 
     # define the mesh
