@@ -20,10 +20,10 @@ Created on Fri Jun 19 18:56:57 2020
 @author: thurcni@163.com, xzhang@tsinghua.edu.cn
 """
 from sys import argv, exit
-from PrePost import create_model_json, postprocess
+from PrePost import create_model_json, point_and_trac, postprocess
 from Elast2DElem import Elast2DElem
 import FEData as model
-from utitls import assembly, point_and_trac, solvedr
+from utitls import assembly, solvedr
 
 
 def FERun(DataFile):
