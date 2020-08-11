@@ -1,5 +1,5 @@
 {
-	"Title": "Example 9.3 (1 element)", 
+	"Title": "Example 4-1 (1 element)", 
 
 	"nsd": 2,
 	"ndof": 2, 
@@ -41,6 +41,6 @@
 	"compute_stress": "yes", 
 	"plot_stress_xx": "yes", 
 	"plot_mises": "yes", 
-	"plot_tex": "yes",
+	"plot_tex": "no",
 	"fact": "9.221e3"
 }
