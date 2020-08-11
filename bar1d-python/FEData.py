@@ -26,8 +26,8 @@ Global variables defining the FEM model
   plot_bar: (bool) Plot bar ?
   plot_nod: plot node number ?
   plot_tex : Convert figures into PGFPlots figures in LaTex file ?
-  nplot: (int) Number of points in the element to plot displacements 
-         and stresses (10*nnp).
+  nplot: (int) Number of points in a element used to plot displacements 
+         and stresses (10*nen).
   x    : (numpy.array(nnp))x coordinate.
   y    : (numpy.array(nnp))y coordinates, used only for the bar plot.
   IEN  : (numpy.array(nen,nel)) Element connectivity array.

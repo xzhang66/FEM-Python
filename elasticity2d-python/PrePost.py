@@ -45,7 +45,7 @@ def create_model_json(DataFile):
 
 	# material properties
 	E = FEData['E']
-	ne = FEData['ne']
+	ne = FEData['nu']
 	model.D = np.array([[1, ne, 0],
 						[ne, 1, 0],
 						[0, 0, (1-ne)/2]])*E/(1 - ne**2)
@@ -102,6 +102,75 @@ def create_model_json(DataFile):
 	setup_ID_LM()
 
 
+def point_and_trac():
+	"""
+	Add the nodal forces and natural B.C. to the global force vector.
+	"""
+	# Assemble point forces
+	model.f = model.f + model.P[model.ID - 1]
+
+	# Compute nodal boundary force vector
+	for i in range(model.nbe):
+		ft = np.zeros((4, 1))							# initialize nodal boundary force vector
+		node1 = int(model.n_bc[0, i])					# first node
+		node2 = int(model.n_bc[1, i])					# second node
+		n_bce = model.n_bc[2:, i].reshape((-1, 1))		# traction value at node1
+
+		# coordinates
+		x1 = model.x[node1 - 1]
+		y1 = model.y[node1 - 1]
+		x2 = model.x[node2 - 1]
+		y2 = model.y[node2 - 1]
+
+		# edge length
+		leng = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+		J = leng/2.0
+
+		w, gp = gauss(model.ngp)
+
+		for j in range(model.ngp):
+			psi = gp[j]
+			N = 0.5*np.array([[1-psi, 0, 1+psi, 0],
+							  [0, 1-psi, 0, 1+psi]])
+
+			traction = N@n_bce
+			ft = ft + w[j]*J*(N.T@traction)
+
+		# Assemble nodal boundary force vector
+		ind1 = model.ndof*(node1 - 1)
+		ind2 = model.ndof*(node2 - 1)
+
+		model.f[model.ID[ind1] - 1, 0] += ft[0]
+		model.f[model.ID[ind1 + 1] - 1, 0] += ft[1]
+		model.f[model.ID[ind2] - 1, 0] += ft[2]
+		model.f[model.ID[ind2 + 1] - 1, 0] += ft[3]
+
+
+def setup_ID_LM():
+	"""
+	Calculate the ID and LM matrix according to model.flags and model.IEN matrix.
+	"""
+	count = 0
+	count1 = 0
+	for i in range(model.neq):
+		if model.flags[i] == 2:
+			# check if a node on essential boundary
+			count += 1
+			model.ID[i] = count
+			model.d[count] = model.e_bc[i]
+		else:
+			count1 += 1
+			model.ID[i] = model.nd + count1
+
+	for i in range(model.nel):
+		n = 0
+		for j in range(model.nen):
+			blk = model.ndof * (model.IEN[j, i] - 1)
+			for k in range(model.ndof):
+				model.LM[n, i] = model.ID[blk + k]
+				n += 1
+
+
 def plot_mesh():
 	"""
 	Plot the initial mesh and print the mesh parameters.
@@ -141,31 +210,6 @@ def plot_mesh():
 	print('No. of Elements  {}'.format(model.nel))
 	print('No. of Nodes     {}'.format(model.nnp))
 	print('No. of Equations {}'.format(model.neq))
-
-
-def setup_ID_LM():
-	"""
-	Calculate the ID and LM matrix according to model.flags and model.IEN matrix.
-	"""
-	count = 0
-	count1 = 0
-	for i in range(model.neq):
-		if model.flags[i] == 2:
-			# check if a node on essential boundary
-			count += 1
-			model.ID[i] = count
-			model.d[count] = model.e_bc[i]
-		else:
-			count1 += 1
-			model.ID[i] = model.nd + count1
-
-	for i in range(model.nel):
-		n = 0
-		for j in range(model.nen):
-			blk = model.ndof * (model.IEN[j, i] - 1)
-			for k in range(model.ndof):
-				model.LM[n, i] = model.ID[blk + k]
-				n += 1
 
 
 def postprocess():
@@ -327,7 +371,8 @@ def stress_contours():
 			YY = [[model.y[model.IEN[0, i] - 1], model.y[model.IEN[1, i] - 1]],
 				  [model.y[model.IEN[3, i] - 1], model.y[model.IEN[2, i] - 1]]]
 
-			sxx = model.nodestress[model.IEN[:, i] - 1, 0]/(model.counter[model.IEN[:, i] - 1].T.squeeze())
+			sxx = model.nodestress[model.IEN[:, i] - 1, 0] / \
+                 (model.counter[model.IEN[:, i] - 1].T.squeeze())
 
 			dd = [[sxx[0], sxx[1]], [sxx[3], sxx[2]]]
 

@@ -87,14 +87,16 @@ axs[1,1].plot(h3,EnNorm3)
 
 # Linear regression 
 print("The L2/energy error norms are ")
+
 a, C = np.polyfit(np.log(h2),np.log(L2Norm2),1)
-print("    Linear element    : ||e||_L2 = %g h^%g" %(C, a))
-a, C = np.polyfit(np.log(h3),np.log(L2Norm3),1)
-print("    Quadratic element : ||e||_L2 = %g h^%g" %(C, a))
+print("    Linear element    : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h2),np.log(EnNorm2),1)
-print("    Linear element    : ||e||_en = %g h^%g" %(C, a))
+print("    Linear element    : ||e||_en = %e h^%g" %(np.e**C, a))
+
+a, C = np.polyfit(np.log(h3),np.log(L2Norm3),1)
+print("    Quadratic element : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h3),np.log(EnNorm3),1)
-print("    Quadratic element : ||e||_en = %g h^%g\n" %(C, a))
+print("    Quadratic element : ||e||_en = %e h^%g\n" %(np.e**C, a))
 
 # Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
 # which can be added into your LaTex source code by "\input{fe_plot.tex}"
