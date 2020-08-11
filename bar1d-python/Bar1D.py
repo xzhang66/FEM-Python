@@ -23,9 +23,9 @@ Created on Sun Apr 24 18:56:57 2020
 from sys import argv,exit
 
 import FEData as model
-from Bar1DElem import BarElem, naturalBC
+from Bar1DElem import BarElem
 from utitls import solvedr, assembly
-from PrePost import create_model_json, plotbar, postprocessor
+from PrePost import create_model_json, naturalBC, plotbar, postprocessor
 
 def FERun(DataFile,BarType): 
     # create FE model from DataFile in json format
