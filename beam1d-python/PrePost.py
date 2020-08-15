@@ -13,6 +13,9 @@ Created on Aug. 11 2020
 import numpy as np
 import json
 import matplotlib.pyplot as plt
+from utils import gauss
+from Beam1DElem import Nmatrix1D, Bmatrix1D, Smatrix1D
+from Exact import ExactSolution_Cantilever
 import tikzplotlib
 
 import FEData as model
@@ -75,7 +78,7 @@ def create_model_json(DataFile):
 	model.IEN = np.array(FEData['IEN'], np.int)
 
 	model.ID = np.zeros(model.neq, np.int)
-	model.LM = np.zeros((model.nen, model.nel), np.int)
+	model.LM = np.zeros((model.neqe, model.nel), np.int)
 
 	# generate LM and ID arrays
 	setup_ID_LM()
@@ -108,3 +111,108 @@ def plotbeam():
 		print('No. of Elements  ' + str(model.nel))
 		print('No. of Nodes     ' + str(model.nnp))
 		print('No. of Equations ' + str(model.neq))
+
+def disp_moment_and_shear(e, ax1, ax2, ax3):
+	"""
+	Print the moments and shear forces at the Gauss points, plot displacements,
+	moments and shear forces distributions obtained by FE analysis.
+
+	Args:
+		e: (int) element number
+		ax1 : axis to draw displacement distribution
+		ax2 : axis to draw moment distribution
+		ax3 : axis to draw shear force distribution
+	"""
+	de = model.d[model.LM[:,e]-1]
+	IENe = model.IEN[:,e]-1
+	xe = model.x[IENe]
+	J = (xe[-1] - xe[0])/2
+	w, gp = gauss(model.ngp)
+
+	gauss_pt = np.zeros(model.ngp)
+	moment_gauss = np.zeros(model.ngp)
+	shear_gauss = np.zeros(model.ngp)
+
+	for i in range(model.ngp):
+		gauss_pt[i] = 0.5*(xe[0]+xe[-1])+J*gp[i]
+		N = Nmatrix1D(gp[i], xe)
+		B = Bmatrix1D(gp[i], xe)*1/J**2
+		S = Smatrix1D(gp[i], xe)*1/J**3
+		Ee = model.E[e]
+
+		moment_gauss[i] = Ee*B@de
+		shear_gauss[i] = Ee*S@de
+
+	print("%8d %12.6f %12.6f %16.6f %16.6f %16.6f %16.6f"%
+		  (e, gauss_pt[0], gauss_pt[1], moment_gauss[0], moment_gauss[1], shear_gauss[0], shear_gauss[1]))
+
+	# equally distributed coordinate within an element
+	xplot = np.linspace(xe[0], xe[-1], model.nplot)
+	xplotgauss = (2*xplot - xe[0] - xe[-1])/(xe[-1] - xe[0])
+
+	displacement = np.zeros(model.nplot)
+	moment = np.zeros(model.nplot)
+	shear = np.zeros(model.nplot)
+
+	for i in range(model.nplot):
+		xi = xplotgauss[i]
+		N = Nmatrix1D(xi, xe)
+		B = Bmatrix1D(xi, xe)*1/J**2
+		S = Smatrix1D(xi, xe)*1/J**3
+		Ee = model.E[e]
+		displacement[i] = N@de
+		moment[i] = Ee*B@de
+		shear[i] = Ee*S@de
+
+	# plot displacements and moments and shear forces
+	line1, = ax1.plot(xplot, displacement)
+	line2, = ax2.plot(xplot, moment)
+	line3, = ax3.plot(xplot, shear)
+	if e == 0:
+		line1.set_label('FE')
+		line2.set_label('FE')
+		line3.set_label('FE')
+
+def postprocessor(BeamType):
+	"""
+	Loop over elements to print&plot displacements, moments and shear forces
+
+	Args：
+		BeamType: the beam type of exact solution
+	"""
+
+	print()
+	print('Print stresses at the Gauss points \n')
+	print('%8s %12s %12s %16s %16s %16s %16s'
+		  % ("Element", "x(gauss1)", "x(gauss2)", "moment(gauss1)", "moment(gauss2)",
+			 "shear force(gauss1)", "shear force(gauss2)"))
+	print('-------------------------------------------------------------------------------------------------------')
+
+	fig, (ax1, ax2, ax3) = plt.subplots(3,1)
+	plt.tight_layout()
+
+	ax1.set_title('FE analysis of 1D beam')
+	ax1.set_ylabel('displacement')
+
+	ax2.set_ylabel('moment')
+
+	ax3.set_xlabel('x')
+	ax3.set_ylabel('shear force')
+
+	for e in range(model.nel):
+		disp_moment_and_shear(e, ax1, ax2, ax3)
+
+	if BeamType == "Cantilever":
+		ExactSolution_Cantilever(ax1, ax2, ax3)
+	elif BeamType != None:
+		print('Exact solution for %s is not available'%(BeamType))
+
+	ax1.legend()
+	ax2.legend()
+	ax3.legend()
+	plt.show()
+
+	# Convert matplotlib figures into PGFPlots figures stored in a Tikz file,
+	# which can be added into your LaTex source code by "\input{fe_plot.tex}"
+	if model.plot_tex == "yes":
+		tikzplotlib.save("fe_plot.tex")
