@@ -49,7 +49,6 @@ def create_model_json(DataFile):
 	model.E = np.array(FEData['E'])
 	model.body = np.array(FEData['body'])
 	model.CArea = np.array(FEData['CArea'])
-	model.leng = np.array(FEData['leng'])
 
 	# gauss integration
 	model.ngp = FEData['ngp']
@@ -76,6 +75,8 @@ def create_model_json(DataFile):
 	model.x = np.array(FEData['x'])
 	model.y = np.array(FEData['y'])
 	model.IEN = np.array(FEData['IEN'], np.int)
+	model.leng = model.x[model.IEN[1,:]-1] - \
+                 model.x[model.IEN[0,:]-1]
 
 	model.ID = np.zeros(model.neq, np.int)
 	model.LM = np.zeros((model.neqe, model.nel), np.int)
