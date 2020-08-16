@@ -21,12 +21,12 @@ Created on Aug. 15, 2020
 
 from sys import argv,exit
 
-from PrePost import create_model_json, plotbeam, postprocessor
-from Beam1DElem import BeamElem, naturalBC
+from PrePost import create_model_json, naturalBC, plotbeam, postprocessor
+from Beam1DElem import BeamElem
 from utils import assembly, solvedr
 import FEData as model
 
-def FERun(DataFile, BeamType):
+def FERun(DataFile):
 	# create FE model from DataFile in json format
 	create_model_json(DataFile)
 
@@ -45,19 +45,15 @@ def FERun(DataFile, BeamType):
 	solvedr()
 
 	# Postprocessing
-	postprocessor(BeamType)
+	postprocessor()
 
 
 if __name__ == "__main__":
 	nargs = len(argv)
 	if nargs == 2:
 		DataFile = argv[1]
-		BeamType = None
-	elif nargs == 3:
-		DataFile = argv[1]
-		BeamType = argv[2]
 	else:
-		print("Usage ： Beam1D file_name [BeamType]")
+		print("Usage ： Beam1D file_name")
 		exit()
 
-	FERun(DataFile, BeamType)
+	FERun(DataFile)

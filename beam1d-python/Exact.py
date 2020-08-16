@@ -12,10 +12,10 @@ Created on Aug. 15 2020
 
 import numpy as np
 
-def ExactSolution_Cantilever(ax1, ax2, ax3):
+def ExactSolution_Fish_10_1(ax1, ax2, ax3):
 	"""
-	Plot the exact displacement, moment and shear force of the cantilever in
-	ax1, ax2 and ax3, respectively.
+	Plot the exact displacement, moment and shear force of the cantilever 
+    beam (Example 10.1, Fish's book) in	ax1, ax2 and ax3, respectively.
 
 	Args:
 		ax1 : axis to draw displacement distribution
@@ -85,3 +85,36 @@ def ExactSolution_Cantilever(ax1, ax2, ax3):
 	ax1.plot(x, w, '--r', label='Exact')
 	ax2.plot(x, M, '--r', label='Exact')
 	ax3.plot(x, S, '--r', label='Exact')
+    
+
+def ExactSolution_Ex_6_1(ax1, ax2, ax3):
+	"""
+	Plot the exact displacement, moment and shear force of the cantilever 
+    beam (Example 6-1) in ax1, ax2 and ax3, respectively. 
+
+	Args:
+		ax1 : axis to draw displacement distribution
+		ax2 : axis to draw moment distribution
+		ax3 : axis to draw shear force distribution
+	"""
+    
+	E = 1e4; I = 1.0
+
+	x = np.arange(0, 8, 0.01)
+	w = np.zeros(800, np.float)
+	M = np.zeros(800, np.float)
+	S = np.zeros(800, np.float)
+
+	for index, xi in enumerate(x):
+		if xi < 4:
+			w[index] = (-xi**4/24 + 14*xi**3/3 - 71*xi**2)/(E*I)
+			M[index] = -xi**2/2 + 28*xi - 142
+			S[index] = 28 - xi
+		else:
+			w[index] = (-xi**4/24 + 3*xi**3 - 51*xi**2 - 80*xi + 320/3)/(E*I)
+			M[index] = -xi**2/2 + 18*xi - 102
+			S[index] = 18 - xi
+
+	ax1.plot(x, w, '--r', label='Exact')
+	ax2.plot(x, M, '--r', label='Exact')
+	ax3.plot(x, S, '--r', label='Exact')    

@@ -1,6 +1,6 @@
 {
   "Title": " Example 10.1 (Beam) (Fish book)",
-  "nsd": 2,
+  "nsd": 1,
   "ndof": 2,
   "nnp": 3,
   "nel": 2,
@@ -30,5 +30,6 @@
 
   "plot_beam": "yes",
   "plot_nod": "yes",
-  "plot_tex": "no"
+  "plot_tex": "no",
+  "Exact": "Fish-10.1"
 }

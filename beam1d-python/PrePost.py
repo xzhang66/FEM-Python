@@ -13,13 +13,12 @@ Created on Aug. 11 2020
 import numpy as np
 import json
 import matplotlib.pyplot as plt
-from utils import gauss
-from Beam1DElem import Nmatrix1D, Bmatrix1D, Smatrix1D
-from Exact import ExactSolution_Cantilever
 import tikzplotlib
 
+from utils import gauss
+from Beam1DElem import Nmatrix1D, Bmatrix1D, Smatrix1D
+from Exact import ExactSolution_Fish_10_1, ExactSolution_Ex_6_1
 import FEData as model
-from Beam1DElem import setup_ID_LM
 
 
 def create_model_json(DataFile):
@@ -70,6 +69,7 @@ def create_model_json(DataFile):
 	model.plot_nod = FEData['plot_nod']
 	model.nplot = model.nen * 10
 	model.plot_tex = FEData['plot_tex']
+	model.Exact = FEData['Exact']
 
 	# define the mesh
 	model.x = np.array(FEData['x'])
@@ -83,6 +83,37 @@ def create_model_json(DataFile):
 
 	# generate LM and ID arrays
 	setup_ID_LM()
+
+
+def setup_ID_LM():
+	""" Setup ID and LM arrays """
+	count = 0
+	count1 = 0
+
+	# Reorder the D.O.F. to make the essential B.C. numbered first
+	for i in range(model.neq):
+		if model.flags[i] == 2:		# Essential boundary node
+			count += 1
+			model.ID[i] = count		# The reordered number of essential B.C
+			model.d[count] = model.e_bc[i]
+		else:
+			count1 += 1
+			model.ID[i] = model.nd + count1
+
+	for i in range(model.nel):
+		for j in range(model.nen):
+			for k in range(model.ndof):
+				ind = j*model.ndof + k
+				model.LM[ind, i] = model.ID[model.ndof*(model.IEN[j,i] - 1) + k]
+
+
+def naturalBC():
+	""" Compute and assemble nodal boundary force vector """
+	for i in range(model.neq):
+		if model.flags[i] == 1:
+			dof = model.ID[i] - 1
+			model.f[dof] += model.n_bc[dof]
+
 
 def plotbeam():
 	""" Plot the beam """
@@ -174,7 +205,7 @@ def disp_moment_and_shear(e, ax1, ax2, ax3):
 		line2.set_label('FE')
 		line3.set_label('FE')
 
-def postprocessor(BeamType):
+def postprocessor():
 	"""
 	Loop over elements to print&plot displacements, moments and shear forces
 
@@ -203,10 +234,12 @@ def postprocessor(BeamType):
 	for e in range(model.nel):
 		disp_moment_and_shear(e, ax1, ax2, ax3)
 
-	if BeamType == "Cantilever":
-		ExactSolution_Cantilever(ax1, ax2, ax3)
-	elif BeamType != None:
-		print('Exact solution for %s is not available'%(BeamType))
+	if model.Exact == "Fish-10.1":
+		ExactSolution_Fish_10_1(ax1, ax2, ax3)
+	elif model.Exact == "Ex-6-1":
+		ExactSolution_Ex_6_1(ax1, ax2, ax3)
+	else:
+		print('Exact solution for %s is not available'%(model.Exact))
 
 	ax1.legend()
 	ax2.legend()

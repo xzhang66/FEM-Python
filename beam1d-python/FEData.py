@@ -11,33 +11,42 @@ Global variables defining the FEM model
   nen  : (int) Number of element nodes.
   neq  : (int) Number of equations (D.O.F)
   neqe : (int) Number of equations for each element
+  
   E    : (numpy.array(nel)) Element values Young's modulus.
   body : (numpy.arraay(nel)) Element values body forces.
   CArea: (numpy.array(nnp)) Nodal values of cross-sectional area.
   leng : (numpy.array(nel)) Element values element length
   ngp  : (int) Number of gauss points.
+  
   flags: (numpy.array(nnp))  Nodal boundary condition flag:
          2 - located on the essential boundary;
          1 - located on the natural boundary.
   nd   : (int) Number of nodes on the essential boundary.
-  e_bc : (numpy.array(nnp)) Value of essential B.C.
-  n_bc : (numpy.array(nnp)) Value of natural B.C.
+  e_bc : (numpy.array(neq)) Value of essential B.C.
+  n_bc : (numpy.array(neq)) Value of natural B.C.
+  
   np   : (int) Number of point forces.
   xp   : ((numpy.array(np))) Array of coordinates where point forces are applied.
   P    : (numpy.array(np)) Array of point forcess.
-  plot_beam: (bool) Plot beam ?
-  plot_nod: plot node number ?
-  plot_tex : Convert figures into PGFPlots figures in LaTex file ?
-  nplot: (int) Number of points in a element used to plot displacements
-         and stresses (10*nen).
+  
   x    : (numpy.array(nnp))x coordinate.
   y    : (numpy.array(nnp))y coordinates, used only for the bar plot.
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   ID   : (numpy.array(neq) Identification matrix.
   LM   : (numpy.array(nen,nel)) Location matrix.
+  
   K    : (numpy.array(neq,neq)) Global stiffness matrix
   f    : (numpy.array(neq,1)) Global nodal force vector
   d    : (numpy.array(neq,1)) Solution vector
+  
+  plot_beam: (bool) Plot beam ?
+  plot_nod: plot node number ?
+  plot_tex : Convert figures into PGFPlots figures in LaTex file ?
+  nplot: (int) Number of points in a element used to plot displacements
+         and stresses (10*nen).
+  Exact: Problem type whose exact solution is available  
+         Fish-10.1 : The example 10.1 in Fish's book
+         Ex-6-1    : The example 6-1
 
 Important notices
 
