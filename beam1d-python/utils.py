@@ -84,6 +84,7 @@ def solvedr():
 	# write to the workspace
 	print('\nsolution d')
 	print(model.d)
-	print('\nreaction f =', f_E)
+	print('\nreaction f')
+	print(f_E)
 
 	return f_E
