@@ -16,12 +16,12 @@ Global variables defining the FEM model
   CArea: (numpy.array(nnp)) Nodal values of cross-sectional area.
   ngp  : (int) Number of gauss points.
 
-  flags: (numpy.array(nnp))  Nodal boundary condition flag:
+  flags: (numpy.array(neq))  Nodal DOF boundary condition flag:
          2 - located on the essential boundary;
          1 - located on the natural boundary.
   nd   : (int) Number of nodes on the essential boundary.
-  e_bc : (numpy.array(nnp)) Value of essential B.C.
-  n_bc : (numpy.array(nnp)) Value of natural B.C.
+  e_bc : (numpy.array(neq)) Value of essential B.C.
+  n_bc : (numpy.array(neq)) Value of natural B.C.
 
   np   : (int) Number of point forces.
   xp   : ((numpy.array(np))) Array of coordinates where point forces are applied.

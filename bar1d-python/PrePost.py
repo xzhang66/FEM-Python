@@ -109,7 +109,7 @@ def setup_ID_LM():
 
 def naturalBC():
     """ Compute and assemble nodal boundary force vector """
-    for i in range(model.nnp):
+    for i in range(model.neq):
        if model.flags[i] == 1:
           node = model.ID[i]-1
           model.f[node] += model.CArea[node]*model.n_bc[node]
