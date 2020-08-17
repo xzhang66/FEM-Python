@@ -29,6 +29,8 @@
 
 	"plot_bar": "yes",
 	"plot_nod": "yes",
-	"plot_tex": "no"
+	"plot_tex": "no",
+	
+	"Exact": "CompressionBar"
 }
 

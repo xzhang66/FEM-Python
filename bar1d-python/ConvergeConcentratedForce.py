@@ -18,10 +18,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Json data files for the concentrated force in an element
-files_even = ("2_element_even.json", "4_element_even.json", "8_element_even.json", "16_element_even.json")
+files_even = ("2_element_even.json", "4_element_even.json", 
+              "8_element_even.json", "16_element_even.json")
 
 # Json data files for the concentrated force on a node
-files_node = ("2_element_node.json", "4_element_node.json", "8_element_node.json", "16_element_node.json")
+files_node = ("2_element_node.json", "4_element_node.json", 
+              "8_element_node.json", "16_element_node.json")
 
 # Run FE analysis for all files of the concentrated force in an element
 n_even = len(files_even)
@@ -29,7 +31,7 @@ h_even = np.zeros(n_even)
 L2Norm_even = np.zeros(n_even)
 EnNorm_even = np.zeros(n_even)
 for i in range(n_even):
-	FERun("Convergence/ConcentratedForce/" + files_even[i], "ConcentratedForce")
+	FERun("Convergence/ConcentratedForce/" + files_even[i])
 
 	# Calculate error norms for convergence study
 	h_even[i], L2Norm_even[i], EnNorm_even[i] = ErrorNorm_ConcentratedForce(False)
@@ -40,7 +42,7 @@ h_node = np.zeros(n_node)
 L2Norm_node = np.zeros(n_node)
 EnNorm_node = np.zeros(n_node)
 for i in range(n_node):
-	FERun("Convergence/ConcentratedForce/" + files_node[i], "ConcentratedForce")
+	FERun("Convergence/ConcentratedForce/" + files_node[i])
 
 	# Calculate error norms for convergence study
 	h_node[i], L2Norm_node[i], EnNorm_node[i] = ErrorNorm_ConcentratedForce(True)
