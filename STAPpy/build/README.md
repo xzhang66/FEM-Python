@@ -11,7 +11,8 @@
 /*****************************************************************************/
 ```
 
-This file is used to teach you how to build the project of STAPpy from .py files to a .exe file
+This file is used to teach you how to build the project of STAPpy from .py 
+files to a .exe file
 
 # Environment Requirement
 1. python 3.7.x
@@ -19,25 +20,28 @@ This file is used to teach you how to build the project of STAPpy from .py files
 3. pyinstaller
 
 # Build the project
-1. Run the terminal and change directory into this folder. If you use PowerShell under Windows OS, your path should be as follows:
-
-        PS your_path\FEM-Python\STAPpy\build>
-
-"your_path" is the directory where you run the "git clone" command to download this project.
+1. Run the terminal and change directory into this folder. 
 
 2. Run the following command:
 
-        PS your_path\FEM-Python\STAPpy\build> pyinstaller -F ../STAP.py -p ../element -p ../solver -p ../utils --hidden-import ../Domain.py --hidden-import ../LoadCaseData.py
+   pyinstaller -F ../STAP.py -p ../element -p ../solver -p ../utils \
+     --hidden-import ../Domain.py --hidden-import ../LoadCaseData.py
     
-    -F: Create a one-file bundled executable
+     -F: Create a one-file bundled executable
     
-    -p DIR: A path to search for imports (like using PYTHONPATH). Multiple paths are allowed, separated by ';', or use this option multiple times
+     -p DIR: A path to search for imports (like using PYTHONPATH). Multiple 
+        paths are allowed, separated by ';', or use this option multiple times
     
-    --hidden-import MODULENAME: Name an import not visible in the code of the scripts(s). This option can be used multiple times.
+     --hidden-import MODULENAME: Name an import not visible in the code of 
+        the scripts(s). This option can be used multiple times.
 
-    If you create new folder(s) or new file(s) under folder "./STAPpy/", then you need to modify the above command.
+    If you create new folder(s) or new file(s) under folder "./STAPpy/", 
+    then you need to modify the above command.
 
-3. Now there should be two folders named "build/" and "dist/" under this folder. And there should be a file named "STAP.exe" under the "dist/" folder. You can copy this .exe file to anywhere you prefer, and run the project as:
+3. Now there should be two folders named "build/" and "dist/" under this 
+   folder. And there should be a file named "STAP.exe" under the "dist/" 
+   folder. You can copy this .exe file to anywhere you prefer, and run the 
+   project as:
 
         ./STAP.exe file_name
     
