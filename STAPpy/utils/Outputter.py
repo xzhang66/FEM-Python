@@ -92,8 +92,8 @@ class COutputter(object):
 		print(pre_info, end="")
 		self._output_file.write(pre_info)
 
-		for np in range(NUMNP):
-			NodeList[np].Write(self._output_file)
+		for n in range(NUMNP):
+			NodeList[n].Write(self._output_file)
 
 		print("\n", end="")
 		self._output_file.write("\n")
@@ -113,8 +113,8 @@ class COutputter(object):
 		print(pre_info, end="")
 		self._output_file.write(pre_info)
 
-		for np in range(NUMNP):
-			NodeList[np].WriteEquationNo(self._output_file)
+		for n in range(NUMNP):
+			NodeList[n].WriteEquationNo(self._output_file)
 
 		print("\n", end="")
 		self._output_file.write("\n")
@@ -226,8 +226,8 @@ class COutputter(object):
 		print(pre_info, end="")
 		self._output_file.write(pre_info)
 
-		for np in range(FEMData.GetNUMNP()):
-			NodeList[np].WriteNodalDisplacement(self._output_file, displacement)
+		for n in range(FEMData.GetNUMNP()):
+			NodeList[n].WriteNodalDisplacement(self._output_file, displacement)
 
 		print("\n", end="")
 		self._output_file.write("\n")
