@@ -23,11 +23,11 @@ Created on Sun Apr 24 18:56:57 2020
 from sys import argv,exit
 
 import FEData as model
-from Bar1DElem import BarElem, naturalBC
+from Bar1DElem import BarElem
 from utitls import solvedr, assembly
-from PrePost import create_model_json, plotbar, postprocessor
+from PrePost import create_model_json, naturalBC, plotbar, postprocessor
 
-def FERun(DataFile,BarType): 
+def FERun(DataFile): 
     # create FE model from DataFile in json format
     # create_model_json('Convergence/16-elements-3Q.json')
     create_model_json(DataFile)
@@ -47,19 +47,15 @@ def FERun(DataFile,BarType):
     solvedr()
     
     # Postprocessing
-    postprocessor(BarType)
+    postprocessor()
 
     
 if __name__ == "__main__":    
     nargs = len(argv)
     if nargs == 2:
         DataFile = argv[1]
-        BarType = None
-    elif nargs == 3:
-        DataFile = argv[1]
-        BarType = argv[2]
     else:
-        print("Usage ： Bar1D file_name [BarType]")
+        print("Usage ： Bar1D file_name")
         exit()
     
-    FERun(DataFile,BarType)
+    FERun(DataFile)

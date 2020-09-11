@@ -17,8 +17,9 @@ import tikzplotlib
 
 import FEData as model
 from utitls import gauss
-from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar, ExactSolution_ConcentratedForce
-from Bar1DElem import setup_ID_LM, Nmatrix1D, Bmatrix1D
+from Exact import ExactSolution_TaperedBar, ExactSolution_CompressionBar, \
+     ExactSolution_ConcentratedForce
+from Bar1DElem import Nmatrix1D, Bmatrix1D
 
 
 def create_model_json(DataFile):
@@ -76,10 +77,44 @@ def create_model_json(DataFile):
 
     model.ID  = np.zeros(model.neq,np.int)
     model.LM  = np.zeros((model.nen,model.nel),np.int)   
+        
+    if 'Exact' in FEData:
+        model.Exact = FEData['Exact']
+    else:
+        model.Exact = None
 
     # generate LM and ID arrays
     setup_ID_LM()
-   
+
+
+def setup_ID_LM():
+    """ Setup ID and LM arrays """
+    count  = 0
+    count1 = 0
+    
+    # Reorder the D.O.F. to make the essential B.C. numbered first
+    for i in range(model.neq):
+        if model.flags[i] == 2:   # Essential boundary node
+            count = count + 1      
+            model.ID[i] = count   # The reordered number of essential B.C
+            model.d[count] = model.e_bc[i] 
+        else:
+            count1 = count1 + 1
+            model.ID[i] = model.nd + count1
+
+    for i in range(model.nel):
+        for j in range(model.nen):
+            model.LM[j,i] = model.ID[model.IEN[j,i]-1]
+
+
+def naturalBC():
+    """ Compute and assemble nodal boundary force vector """
+    for i in range(model.neq):
+       if model.flags[i] == 1:
+          node = model.ID[i]-1
+          model.f[node] += model.CArea[node]*model.n_bc[node]
+
+    
 def plotbar():
     """ Plot the bar  """
     if model.plot_bar == 'yes' and model.nen == 3:
@@ -172,7 +207,7 @@ def disp_and_stress(e, d, ax1, ax2):
         line2.set_label('FE')
 
 
-def postprocessor(BarType):
+def postprocessor():
     """ 
     Print stresses at Gauss points, plot displacement and stress
     distributions obtained by FE analysis calling disp_and_stress and
@@ -200,14 +235,14 @@ def postprocessor(BarType):
         disp_and_stress(e,model.d,ax1,ax2)
         
     # plot the exact solution
-    if BarType == "TaperedBar":
+    if model.Exact == "TaperedBar":
         ExactSolution_TaperedBar(ax1,ax2)
-    elif BarType == "CompressionBar":
+    elif model.Exact == "CompressionBar":
         ExactSolution_CompressionBar(ax1,ax2)
-    elif BarType == "ConcentratedForce":
+    elif model.Exact == "ConcentratedForce":
         ExactSolution_ConcentratedForce(ax1, ax2)
-    elif BarType != None:
-        print('Exact solution for %s is not available'%(BarType))
+    elif model.Exact != None:
+        print('Error: Exact solution for %s is not available'%(model.Exact))
 
     ax1.legend()
     ax2.legend()
