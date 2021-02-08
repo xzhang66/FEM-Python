@@ -603,10 +603,70 @@ git push origin fea2
 \item 类似A同学向master分支合并fea1分支一样，将fea2分支合并到dev分支中。由于所有功能都开发完毕了，所以我们可以将dev分支合并到master分支中完成1.0版本的Tutorial软件。如果再有任务要求添加新的功能更新软件的2.0版本，可以按这种方式进行软件迭代。
 \end{enumerate}
 
-\section{小结}
+\section{Git桌面版图形界面}
+在这里给大家推荐两种界面简洁好用的桌面版图形界面：Sourcetree和GitKraken。由于Sourcetree只能在Windows和Mac OS系统下进行安装而助教的PC是Ubunutu系统，所以这里给大家重点介绍跨平台的GitKraken软件。
+
+\subsection*{软件安装}
+大家前往官网\url{https://www.gitkraken.com/}即可下载安装。
+
+\newpage
+\subsection*{软件的简单使用教程}
+
+\quad
+
+\begin{enumerate}[1.]
+    \item 第一次运行软件会进入如图47所示的界面进行用户注册，我们选择第一项“Sign in with GitHub”，然后会自动跳转到GitHub网页进行授权操作。按照提示正常操作即可。
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=5cm]{figure/GitKraken_sign.png}
+        \caption{GitKraken软件的用户注册}
+    \end{figure}
+
+    \quad
+
+    \item 授权完成后会进入到如图48所示的界面填写个人的相关信息，大家如实填写即可。
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=6cm]{figure/GitKraken_profile.png}
+        \caption{GitKraken软件的用户信息}
+    \end{figure}
+    
+    \item 填写完上述信息以及以后打开GitKraken软件就会进入如图49所示的欢迎界面。
+    
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[height=8cm]{figure/GitKraken_start.png}
+        \caption{GitKraken软件的欢迎界面}
+    \end{figure}
+
+    \item 我们点击图49中的“Clone a repo”的按钮就会进入到如图50所示的仓库克隆界面。由于我们在第一步的时候已经使用GitHub平台对GitKraken软件进行了授权，因此当我们选择列表中的“GitHub.com”时可以直接选择账号中的远端仓库，非常方便。当然也可以使用“Clone with URL”，将远端仓库的URL地址复制进去进行克隆。
+    \item 成功克隆之后会在软件上方弹出如图51所示的弹窗，我们直接点击就能进入仓库的管理界面如图52所示。
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[height=8cm]{figure/GitKraken_clone.png}
+        \caption{GitKraken软件的仓库克隆界面}
+    \end{figure}
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[height=1cm]{figure/GitKraken_open.png}
+        \caption{GitKraken软件的仓库克隆界面}
+    \end{figure}
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[height=8cm]{figure/GitKraken_repo.png}
+        \caption{GitKraken软件的仓库管理界面}
+    \end{figure}
+\end{enumerate}
+
+\newpage
+\section{小结＆作业}
 \begin{enumerate}[1. ]
 \item 请大家两人一组进行上述简单例子的实验熟悉Git版本控制和GitHub平台；
 \item 请大家百度搜索《廖雪峰的Git教程》进行深入学习掌握Git版本控制的相关概念；
+\item 请大家自行熟悉GitKraken图形界面，多尝试一下各个按钮以及各个位置处鼠标右键的下拉菜单。可以尝试使用GitKraken软件来完成上述的简单例子。
 \item 希望大家牢记常用的Git命令。
 \end{enumerate}
 \end{document}
