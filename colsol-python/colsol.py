@@ -68,8 +68,8 @@ def colsol(n,m,K,R):
     for i in range(0, n):
         R[i] /= K[i,i]
 
-    for i in range(n-1, 0, -1):
-        for j in range(m[i], i):
-            R[j] -= K[j,i]*R[i]
+    for j in range(n-1, 0, -1):
+        for i in range(m[j], j):
+            R[i] -= K[i,j]*R[j]
 
     return IERR, K, R
