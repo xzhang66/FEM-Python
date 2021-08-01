@@ -68,18 +68,18 @@ def Elast2DElem(e):
 		DNNorm = 0.0
 		DN = DNmatElast2D(0.0, 0.0, C)
 		for i in range(model.ndof):
-			for j in range(model.nen):
-				DNNorm = DNNorm + DN[i,j] * DN[i,j]
+			for I in range(model.nen):
+				DNNorm = DNNorm + DN[i,I] * DN[i,I]
 		
 		hourglass_k = 0.01 * model.G * DNNorm
 
-		for a in range(model.nen):
+		for I in range(model.nen):
 			for i in range(model.ndof):
-				for b in range(model.nen):
+				a = model.ndof * I + i
+				for J in range(model.nen):
 					for j in range(model.ndof):
-						row = model.ndof * a + i
-						col = model.ndof * b + j
-						ke[row,col] = ke[row,col] + hs_vectors[a] * hs_vectors[b] * hourglass_k * Ae    
+						b = model.ndof * J + j
+						ke[a,b] = ke[a,b] + hs_vectors[I] * hs_vectors[J] * hourglass_k * Ae    
 
 	# compute element nodal force vector
 	for i in range(ngpf):
