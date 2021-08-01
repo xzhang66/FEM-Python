@@ -30,8 +30,8 @@ def gauss(ngp):
 	gp = None
 	w = None
 	if ngp == 1:
-		gp = 0
-		w = 2
+		gp = [0]
+		w = [2]
 	elif ngp == 2:
 		gp = [-0.57735027, 0.57735027]
 		w = [1, 1]
@@ -76,6 +76,8 @@ def solvedr():
 	f_F = model.f[nd:neq]
 	d_E = model.d[0:nd]
 
+	print('\nCondition number of stiffness matrix: ', np.linalg.cond(K_F))
+
 	# solve for d_F
 	d_F = np.linalg.solve(K_F, f_F - K_EF.T @ d_E)
 
@@ -88,6 +90,6 @@ def solvedr():
 	# write to the workspace
 	print('\nsolution d')
 	print(model.d)
-	print('\nreaction f =', f_E)
+	print('\nreaction f = \n', f_E)
 
 	return f_E

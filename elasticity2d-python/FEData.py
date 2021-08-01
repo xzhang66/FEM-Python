@@ -11,6 +11,9 @@ Global variables defining the FEM model
   nen  : (int) Number of element nodes.
   neq  : (int) Number of equations (D.O.F)
   ngp  : (int) Number of gauss points.
+         2 - Full integration
+         1 - Reduced integration with hourglass control
+        -1 - Reduced integration without hourglass control
   
   flags: (numpy.array(nnp))  Nodal boundary condition flag:
          2 - located on the essential boundary;
@@ -24,6 +27,7 @@ Global variables defining the FEM model
   P    : (numpy.array(neq)) Array of nodal external forces.
   b    : (numpy.array(nen*ndof, nel)) Element nodal forces.
   D	   : (numpy.array(3, 3)) elasticity matrix
+  G	   : (float) shear modulus
   
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   ID   : (numpy.array(neq) Identification matrix.
@@ -55,7 +59,7 @@ nnp = 0
 nel = 0
 nen = 0
 neq = 0
-ngp = 0
+ngp = 2
 nd = 0
 nbe = 0
 
@@ -74,6 +78,7 @@ b = None
 
 # material
 D = None
+G = 0.0
 
 # define the mesh
 x = None

@@ -49,6 +49,7 @@ def create_model_json(DataFile):
 	model.D = np.array([[1, ne, 0],
 						[ne, 1, 0],
 						[0, 0, (1-ne)/2]])*E/(1 - ne**2)
+	model.G = E / (2.0 * (1.0 + ne))
 
 	# gauss integration
 	model.ngp = FEData['ngp']
@@ -126,9 +127,10 @@ def point_and_trac():
 		leng = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 		J = leng/2.0
 
-		w, gp = gauss(model.ngp)
+		ngp = abs(model.ngp)
+		w, gp = gauss(ngp)
 
-		for j in range(model.ngp):
+		for j in range(ngp):
 			psi = gp[j]
 			N = 0.5*np.array([[1-psi, 0, 1+psi, 0],
 							  [0, 1-psi, 0, 1+psi]])
@@ -157,7 +159,7 @@ def setup_ID_LM():
 			# check if a node on essential boundary
 			count += 1
 			model.ID[i] = count
-			model.d[count] = model.e_bc[i]
+			model.d[count-1] = model.e_bc[i]
 		else:
 			count1 += 1
 			model.ID[i] = model.nd + count1
@@ -288,17 +290,18 @@ def get_stress(e):
 	je = model.IEN[:, e] - 1
 	C = np.array([model.x[je], model.y[je]]).T
 
+	ngp = abs(model.ngp)
 	# get gauss points and weights
-	w, gp = gauss(model.ngp)
+	w, gp = gauss(ngp)
 
 	# compute strains and stress at the gauss points
 	ind = 0
-	number_gp = model.ngp*model.ngp
+	number_gp = ngp*ngp
 	X = np.zeros((number_gp, 2))
 	strain = np.zeros((3, number_gp))
 	stress = np.zeros((3, number_gp))
-	for i in range(model.ngp):
-		for j in range(model.ngp):
+	for i in range(ngp):
+		for j in range(ngp):
 			eta = gp[i]
 			psi = gp[j]
 			# shape functions matrix
