@@ -180,8 +180,8 @@ def plot_mesh():
 	if model.plot_mesh == 'yes':
 		for i in range(model.nbe):
 			# plot Natural B.C. in red lines
-			node1 = model.n_bc[0, i]
-			node2 = model.n_bc[1, i]
+			node1 = int(model.n_bc[0, i])
+			node2 = int(model.n_bc[1, i])
 
 			# coordinates
 			x1 = model.x[node1 - 1]
