@@ -48,6 +48,7 @@ Global variables defining the FEM model
 
   plot_mesh       : plot mesh ?
   plot_disp       : plot displaced mesh ?
+  print_disp      : print nodal displacement ?
   plot_nod        : plot node number ?
   plot_stress_xx  : plot stress xx ?
   plot_mises      : plot mises stress ?
@@ -100,6 +101,7 @@ nodestress = None
 compute_stress = None
 plot_mesh = None
 plot_disp = None
+print_disp = None
 plot_nod = None
 plot_stress_xx = None
 plot_mises = None

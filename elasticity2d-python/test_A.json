@@ -10,7 +10,7 @@
 	"E": 1.0E+3,
 	"nu": 0.3,
 
-	"ngp": -1,
+	"ngp": 2,
 	"nd": 16,
 
 	"flags": [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ],
@@ -39,6 +39,7 @@
 	"plot_mesh": "yes",
 	"plot_nod": "yes",
 	"plot_disp": "yes",
+	"print_disp": "yes",
 	"compute_stress": "yes",
 	"plot_stress_xx": "yes",
 	"plot_mises": "yes",

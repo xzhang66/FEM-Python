@@ -96,6 +96,7 @@ def create_model_json(DataFile):
 	model.plot_mesh = FEData['plot_mesh']
 	model.plot_nod = FEData['plot_nod']
 	model.plot_disp = FEData['plot_disp']
+	model.print_disp = FEData['print_disp']
 	model.compute_stress = FEData['compute_stress']
 	model.plot_stress_xx = FEData['plot_stress_xx']
 	model.plot_mises = FEData['plot_mises']
@@ -227,6 +228,9 @@ def postprocess():
 	3. Print the element stress on Gauss Point.
 	4. Calculate the nodal stress and plot the stress contours.
 	"""
+	# print the nodal displacement
+	print_displacement()
+
 	# plot the deformed configuration
 	displacement()
 
@@ -283,6 +287,21 @@ def displacement():
 		plt.title('Initial and deformed structure')
 
 
+def print_displacement():
+	"""
+	Print the displacement of all nodes.
+	"""
+	if model.print_disp == 'yes':
+		dis = model.d[model.ID - 1]
+
+		print("\n                           Nodal displacement")
+		print("-------------------------------------------------------------------------------")
+		print("\tnode\tx\ty\t\t\tu_x\t\t\tu_y")
+
+		for i in range(model.nnp):
+			print("\t{}\t{}\t{}\t{:.15e}\t{:.15e}".format(i+1, model.x[i], model.y[i], dis[2*i], dis[2*i+1]))
+
+
 def get_stress(e):
 	"""
 	Print the element stress on Gauss Point.
@@ -324,7 +343,7 @@ def get_stress(e):
 
 	print("\tx-coord\t\t\ty-coord\t\t\ts_xx\t\t\ts_yy\t\t\ts_xy")
 	for i in range(number_gp):
-		print("\t{}\t\t{}\t\t{}\t\t{}\t\t{}".format(X[i, 0], X[i, 1], stress[0, i], stress[1, i], stress[2, i]))
+		print("\t{}\t{}\t{}\t{}\t{}".format(X[i, 0], X[i, 1], stress[0, i], stress[1, i], stress[2, i]))
 
 
 def nodal_stress(e):

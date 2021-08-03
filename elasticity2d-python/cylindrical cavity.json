@@ -7,7 +7,7 @@
 	"nel": 32,
 	"nen": 4,
 
-	"E": 2.998,
+	"E": 13,
 	"nu": 0.3,
 
 	"ngp": 2,
@@ -36,12 +36,13 @@
 
 	"plane_strain": 1,
 	"plot_mesh": "yes",
-	"plot_nod": "no",
+	"plot_nod": "yes",
 	"plot_disp": "yes",
+	"print_disp": "yes",
 	"compute_stress": "yes",
 	"plot_stress_xx": "yes",
 	"plot_mises": "yes",
-	"plot_tex": "no",
+	"plot_tex": "yes",
 	"fact": 1,
 
 	"x": [ 0.00, 0.20, 0.38, 0.56, 0.71, 0.83, 0.92, 0.98, 1.00, 0.00,

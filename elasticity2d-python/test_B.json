@@ -31,6 +31,7 @@
 	"plot_mesh": "yes",
 	"plot_nod": "yes",
 	"plot_disp": "yes",
+	"print_disp": "yes",
 	"compute_stress": "yes",
 	"plot_stress_xx": "yes",
 	"plot_mises": "yes",
