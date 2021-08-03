@@ -46,6 +46,12 @@ def create_model_json(DataFile):
 	# material properties
 	E = FEData['E']
 	ne = FEData['nu']
+
+	model.plane_strain = FEData['plane_strain']
+	if model.plane_strain == 1:   # Plane strain
+		E = E / (1.0 - ne * ne)
+		ne = ne / (1.0 - ne)
+
 	model.D = np.array([[1, ne, 0],
 						[ne, 1, 0],
 						[0, 0, (1-ne)/2]])*E/(1 - ne**2)

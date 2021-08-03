@@ -76,7 +76,8 @@ def solvedr():
 	f_F = model.f[nd:neq]
 	d_E = model.d[0:nd]
 
-	print('\nCondition number of stiffness matrix: ', np.linalg.cond(K_F))
+	if (neq > nd):
+		print('\nCondition number of stiffness matrix: ', np.linalg.cond(K_F))
 
 	# solve for d_F
 	d_F = np.linalg.solve(K_F, f_F - K_EF.T @ d_E)

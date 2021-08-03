@@ -28,6 +28,9 @@ Global variables defining the FEM model
   b    : (numpy.array(nen*ndof, nel)) Element nodal forces.
   D	   : (numpy.array(3, 3)) elasticity matrix
   G	   : (float) shear modulus
+  plane_strain: (int) Type of plane problem.
+                1 - Plane strain
+                0 - Plane stress
   
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   ID   : (numpy.array(neq) Identification matrix.
@@ -79,6 +82,9 @@ b = None
 # material
 D = None
 G = 0.0
+
+# The type of plane problem is set to plane stress by default
+plane_strain = 0
 
 # define the mesh
 x = None
