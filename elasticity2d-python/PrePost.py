@@ -115,7 +115,7 @@ def point_and_trac():
 	Add the nodal forces and natural B.C. to the global force vector.
 	"""
 	# Assemble point forces
-	model.f = model.f + model.P[model.ID - 1]
+	model.f[model.ID - 1] = model.f[model.ID - 1] + model.P
 
 	# Compute nodal boundary force vector
 	for i in range(model.nbe):
