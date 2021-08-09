@@ -41,15 +41,15 @@ def create_model_json(DataFile):
 	model.K = np.zeros((model.neq, model.neq))
 
 	# geometric data
-	model.p_h = FEData['p_h']
-	model.p_lx = FEData['p_lx']
-	model.p_ly = FEData['p_ly']
+	model.h = FEData['h']
+	model.lx = FEData['lx']
+	model.ly = FEData['ly']
 	model.nelx = FEData['nelx']
 	model.nely = FEData['nely']
 	model.nenx = model.nelx + 1
 	model.neny = model.nely + 1
-	model.p_a = model.p_lx / (2 * model.nelx)
-	model.p_b = model.p_ly / (2 * model.nely)
+	model.ae = model.lx / (2 * model.nelx)
+	model.be = model.ly / (2 * model.nely)
 	if model.nelx % 2 != 0:
 		print('No. of Elements  {}  is not even, can not get the centerline of x-axis'.format(model.nelx))
 	if model.nely % 2 != 0:
@@ -58,7 +58,7 @@ def create_model_json(DataFile):
 	# material properties
 	E = FEData['E']
 	ne = FEData['nu']
-	model.D = E * model.p_h ** 3 / (12.0 * (1 - ne ** 2)) * \
+	model.D = E * model.h ** 3 / (12.0 * (1 - ne ** 2)) * \
 				np.array([[1, ne, 0],
 						[ne, 1, 0],
 						[0, 0, (1-ne)/2]])
@@ -91,9 +91,9 @@ def create_model_json(DataFile):
 		model.b = np.zeros((model.nen*model.ndof, model.nel))
 	
 	try:
-		model.p_q = FEData['p_q']
+		model.q = FEData['q']
 	except KeyError:
-		model.p_q = 0.0
+		model.q = 0.0
 
 	# define the mesh
 	model.x = np.array(FEData['x'])
@@ -118,22 +118,22 @@ def point_and_trac():
 	"""
 	# Assemble uniform load
 	P_Q = np.zeros((model.neq, 1))
-	for i in range(model.nel):
-		P_Q[(model.IEN[0, i]-1)*3] += model.p_q * model.p_a * model.p_b
-		P_Q[(model.IEN[0, i]-1)*3+1] += model.p_q * model.p_a * model.p_b * model.p_b / 3.0
-		P_Q[(model.IEN[0, i]-1)*3+2] += model.p_q * model.p_a * model.p_b * (-model.p_a) / 3.0
+	for e in range(model.nel):
+		P_Q[(model.IEN[0, e]-1)*3] += model.q * model.ae * model.be
+		P_Q[(model.IEN[0, e]-1)*3+1] += model.q * model.ae * model.be * model.be / 3.0
+		P_Q[(model.IEN[0, e]-1)*3+2] += model.q * model.ae * model.be * (-model.ae) / 3.0
 		
-		P_Q[(model.IEN[1, i]-1)*3] += model.p_q * model.p_a * model.p_b
-		P_Q[(model.IEN[1, i]-1)*3+1] += model.p_q * model.p_a * model.p_b * (-model.p_b) / 3.0
-		P_Q[(model.IEN[1, i]-1)*3+2] += model.p_q * model.p_a * model.p_b * (-model.p_a) / 3.0
+		P_Q[(model.IEN[1, e]-1)*3] += model.q * model.ae * model.be
+		P_Q[(model.IEN[1, e]-1)*3+1] += model.q * model.ae * model.be * (-model.be) / 3.0
+		P_Q[(model.IEN[1, e]-1)*3+2] += model.q * model.ae * model.be * (-model.ae) / 3.0
 		
-		P_Q[(model.IEN[2, i]-1)*3] += model.p_q * model.p_a * model.p_b
-		P_Q[(model.IEN[2, i]-1)*3+1] += model.p_q * model.p_a * model.p_b * model.p_b / 3.0
-		P_Q[(model.IEN[2, i]-1)*3+2] += model.p_q * model.p_a * model.p_b * model.p_a / 3.0
+		P_Q[(model.IEN[2, e]-1)*3] += model.q * model.ae * model.be
+		P_Q[(model.IEN[2, e]-1)*3+1] += model.q * model.ae * model.be * model.be / 3.0
+		P_Q[(model.IEN[2, e]-1)*3+2] += model.q * model.ae * model.be * model.ae / 3.0
 		
-		P_Q[(model.IEN[3, i]-1)*3] += model.p_q * model.p_a * model.p_b
-		P_Q[(model.IEN[3, i]-1)*3+1] += model.p_q * model.p_a * model.p_b * (-model.p_b) / 3.0
-		P_Q[(model.IEN[3, i]-1)*3+2] += model.p_q * model.p_a * model.p_b * model.p_a / 3.0
+		P_Q[(model.IEN[3, e]-1)*3] += model.q * model.ae * model.be
+		P_Q[(model.IEN[3, e]-1)*3+1] += model.q * model.ae * model.be * (-model.be) / 3.0
+		P_Q[(model.IEN[3, e]-1)*3+2] += model.q * model.ae * model.be * model.ae / 3.0
 	
 	model.f[model.ID - 1] = model.f[model.ID - 1] + P_Q
 
@@ -141,11 +141,11 @@ def point_and_trac():
 	model.f[model.ID - 1] = model.f[model.ID - 1] + model.P
 
 	# Compute nodal boundary force vector
-	for i in range(model.nbe):
+	for e in range(model.nbe):
 		ft = np.zeros((4, 1))							# initialize nodal boundary force vector
-		node1 = int(model.n_bc[0, i])					# first node
-		node2 = int(model.n_bc[1, i])					# second node
-		n_bce = model.n_bc[2:, i].reshape((-1, 1))		# traction value at node1
+		node1 = int(model.n_bc[0, e])					# first node
+		node2 = int(model.n_bc[1, e])					# second node
+		n_bce = model.n_bc[2:, e].reshape((-1, 1))		# traction value at node1
 
 		# coordinates
 		x1 = model.x[node1 - 1]
@@ -159,13 +159,13 @@ def point_and_trac():
 
 		w, gp = gauss(model.ngp)
 
-		for j in range(model.ngp):
-			psi = gp[j]
+		for i in range(model.ngp):
+			psi = gp[i]
 			N = 0.5*np.array([[1-psi, 0, 1+psi, 0],
 							  [0, 1-psi, 0, 1+psi]])
 
 			traction = N@n_bce
-			ft = ft + w[j]*J*(N.T@traction)
+			ft = ft + w[i]*J*(N.T@traction)
 
 		# Assemble nodal boundary force vector
 		ind1 = model.ndof*(node1 - 1)

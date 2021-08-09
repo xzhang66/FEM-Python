@@ -72,10 +72,10 @@ def NmatPlate(eta, psi):
 				(2 + eta_val[i]*eta + psi_val[i]*psi - eta**2 - psi**2)
 				
 		N[0,3*i+1] = 0.125*( 1 +eta_val[i]*eta)*(1 + psi_val[i]*psi) * \
-				(-model.p_b * psi_val[i] * (1 - psi**2))
+				(-model.be * psi_val[i] * (1 - psi**2))
 				
 		N[0,3*i+2] = 0.125*( 1 +eta_val[i]*eta)*(1 + psi_val[i]*psi) * \
-				(model.p_a * eta_val[i] * (1 - eta**2))
+				(model.ae * eta_val[i] * (1 - eta**2))
 
 	return N
 
@@ -113,8 +113,8 @@ def BmatPlate(eta, psi, C):
 								0, -3*x_val[i]**2*y_val[i], -y_val[i]**3 ]])
 	
 	# global coordinates at (eta, psi)
-	xt = eta * model.p_a + (x_val[0] + x_val[1]) / 2.0
-	yt = psi * model.p_b + (y_val[1] + y_val[2]) / 2.0
+	xt = eta * model.ae + (x_val[0] + x_val[1]) / 2.0
+	yt = psi * model.be + (y_val[1] + y_val[2]) / 2.0
 	
 	#Calculate the B_Q matrix
 	B_Q = np.array([[0, 0, 0, 2, 0, 0, 6*xt, 2*yt, 0, 0, 6*xt*yt, 0], \
@@ -124,6 +124,6 @@ def BmatPlate(eta, psi, C):
 	B = B_Q @ np.linalg.inv(B_M)
 	
 	# Compute Jacobian determination
-	detJ = model.p_a * model.p_b
+	detJ = model.ae * model.be
 
 	return B, detJ

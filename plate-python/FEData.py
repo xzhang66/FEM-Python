@@ -12,16 +12,16 @@ Global variables defining the FEM model
   neq  : (int) Number of equations (D.O.F)
   ngp  : (int) Number of gauss points.
   
-  p_lx : (float) Length of plate in the x-direction.
-  p_ly : (float) Length of plate element in the y-direction.
+  lx : (float) Length of plate in the x-direction.
+  ly : (float) Length of plate element in the y-direction.
   nelx : (int) Number of elements in the x-direction.
   nely : (int) Number of elements in the y-direction.
-  nenx : (int) Number of nodes in the x-direction.
-  neny : (int) Number of nodes in the y-direction.
-  p_a  : (float) Length of element in the x-direction.
-  p_b  : (float) Length of element in the y-direction.
-  p_h  : (float) thickness of the plate.
-  p_q  : (float) The uniform load.
+  nenx : (int) Number of nodes in the x-direction (= nelx + 1).
+  neny : (int) Number of nodes in the y-direction (= nely + 1).
+  ae   : (float) Half of the length of element in the x-direction.
+  be   : (float) Half of the length of element in the y-direction.
+  h    : (float) thickness of the plate.
+  q    : (float) The uniform load.
   
   flags: (numpy.array(nnp))  Nodal boundary condition flag:
          2 - located on the essential boundary;
@@ -69,15 +69,15 @@ d = None
 K = None
 
 # geometric data
-p_lx = 0.0
-p_ly = 0.0
+lx = 0.0
+ly = 0.0
 nelx = 0
 nely = 0
 nenx = 0
 neny = 0
-p_h = 0.0
-p_a = 0.0
-p_b = 0.0
+h = 0.0
+ae = 0.0
+be = 0.0
 
 # boundary conditions
 flags = None
@@ -87,7 +87,7 @@ n_bc = None
 # force conditions
 P = None
 b = None
-p_q = 0.0
+q = 0.0
 
 # material
 D = None
