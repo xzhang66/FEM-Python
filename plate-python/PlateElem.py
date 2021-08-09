@@ -62,20 +62,20 @@ def NmatPlate(eta, psi):
 		Element shape function matrix N
 	"""
 	# parent coordinates at nodes
-	eta_val = np.array([-1, 1, 1, -1])
-	psi_val = np.array([-1, -1, 1, 1])
+	eta_I = np.array([-1, 1, 1, -1])
+	psi_I = np.array([-1, -1, 1, 1])
 	
 	N = np.zeros((1, 12))
 	
 	for i in range(model.nen):
-		N[0,3*i] = 0.125*( 1 +eta_val[i]*eta)*(1 + psi_val[i]*psi) * \
-				(2 + eta_val[i]*eta + psi_val[i]*psi - eta**2 - psi**2)
+		N[0,3*i] = 0.125*( 1 +eta_I[i]*eta)*(1 + psi_I[i]*psi) * \
+				(2 + eta_I[i]*eta + psi_I[i]*psi - eta**2 - psi**2)
 				
-		N[0,3*i+1] = 0.125*( 1 +eta_val[i]*eta)*(1 + psi_val[i]*psi) * \
-				(-model.be * psi_val[i] * (1 - psi**2))
+		N[0,3*i+1] = 0.125*( 1 +eta_I[i]*eta)*(1 + psi_I[i]*psi) * \
+				(-model.be * psi_I[i] * (1 - psi**2))
 				
-		N[0,3*i+2] = 0.125*( 1 +eta_val[i]*eta)*(1 + psi_val[i]*psi) * \
-				(model.ae * eta_val[i] * (1 - eta**2))
+		N[0,3*i+2] = 0.125*( 1 +eta_I[i]*eta)*(1 + psi_I[i]*psi) * \
+				(model.ae * eta_I[i] * (1 - eta**2))
 
 	return N
 
@@ -93,28 +93,28 @@ def BmatPlate(eta, psi, C):
 		Derivative of element shape function matrix B and Jacobian determination
 	"""
 	# global coordinates at nodes
-	x_val = np.array([C[0,0], C[1,0], C[2,0], C[3,0]])
-	y_val = np.array([C[0,1], C[1,1], C[2,1], C[3,1]])
+	x_I = np.array([C[0,0], C[1,0], C[2,0], C[3,0]])
+	y_I = np.array([C[0,1], C[1,1], C[2,1], C[3,1]])
 	
 	#Calculate the B_M matrix
 	B_M = np.zeros((12, 12))
 	for i in range(model.nen):
-		B_M[3*i:3*i+3,:] = np.array([[ 1, x_val[i], y_val[i], \
-								x_val[i]**2, x_val[i]*y_val[i], y_val[i]**2, \
-								x_val[i]**3, x_val[i]**2*y_val[i], x_val[i]*y_val[i]**2, \
-								y_val[i]**3, x_val[i]**3*y_val[i], x_val[i]*y_val[i]**3 ], \
+		B_M[3*i:3*i+3,:] = np.array([[ 1, x_I[i], y_I[i], \
+								x_I[i]**2, x_I[i]*y_I[i], y_I[i]**2, \
+								x_I[i]**3, x_I[i]**2*y_I[i], x_I[i]*y_I[i]**2, \
+								y_I[i]**3, x_I[i]**3*y_I[i], x_I[i]*y_I[i]**3 ], \
 								[ 0, 0, 1, \
-								0, x_val[i], 2*y_val[i], \
-								0, x_val[i]**2, 2*x_val[i]*y_val[i], \
-								3*y_val[i]**2, x_val[i]**3, 3*x_val[i]*y_val[i]**2 ], \
+								0, x_I[i], 2*y_I[i], \
+								0, x_I[i]**2, 2*x_I[i]*y_I[i], \
+								3*y_I[i]**2, x_I[i]**3, 3*x_I[i]*y_I[i]**2 ], \
 								[ 0, -1, 0, \
-								-2*x_val[i], -y_val[i], 0, \
-								-3*x_val[i]**2, -2*x_val[i]*y_val[i], -y_val[i]**2, \
-								0, -3*x_val[i]**2*y_val[i], -y_val[i]**3 ]])
+								-2*x_I[i], -y_I[i], 0, \
+								-3*x_I[i]**2, -2*x_I[i]*y_I[i], -y_I[i]**2, \
+								0, -3*x_I[i]**2*y_I[i], -y_I[i]**3 ]])
 	
 	# global coordinates at (eta, psi)
-	xt = eta * model.ae + (x_val[0] + x_val[1]) / 2.0
-	yt = psi * model.be + (y_val[1] + y_val[2]) / 2.0
+	xt = eta * model.ae + (x_I[0] + x_I[1]) / 2.0
+	yt = psi * model.be + (y_I[1] + y_I[2]) / 2.0
 	
 	#Calculate the B_Q matrix
 	B_Q = np.array([[0, 0, 0, 2, 0, 0, 6*xt, 2*yt, 0, 0, 6*xt*yt, 0], \
