@@ -42,5 +42,5 @@
 
 	"plot_mesh": "yes", 
 	"plot_nod" : "yes", 
-	"plot_tex": "no"
+	"plot_tex": "yes"
 }

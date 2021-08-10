@@ -269,6 +269,10 @@ def postprocess():
 		n_e = int(model.nelx * (model.nely / 2 - 1)) + e
 		centerline_deflection_Mx(n_e, ax1, ax2)
 
+	# Convert matplotlib figures into PGFPlots figures
+	if model.plot_tex == "yes":
+		tikzplotlib.save("plate-centerline.pgf")
+		
 	plt.savefig("plate-centerline.pdf")
 	plt.show()
 
