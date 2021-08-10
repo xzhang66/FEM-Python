@@ -1,7 +1,7 @@
 {
 	"Title": "Example 6-3 (4*4 element)",
 	
-	"nsd": 3,
+	"nsd": 2,
 	"ndof": 3,
 	"nnp": 25,
 	"nel": 16,
@@ -42,5 +42,5 @@
 
 	"plot_mesh": "yes", 
 	"plot_nod" : "yes", 
-	"plot_tex": "yes"
+	"plot_tex": "no"
 }

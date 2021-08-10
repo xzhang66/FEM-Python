@@ -252,7 +252,7 @@ def postprocess():
 		if model.plot_tex == "yes":
 			tikzplotlib.save("plate-mesh.pgf")
             
-		plt.savefig("plate-mesh.pdf")
+#		plt.savefig("plate-mesh.pdf")
 		plt.show()
 
 	# plot deflection and moment Mx distributions along centerline
@@ -273,7 +273,7 @@ def postprocess():
 	if model.plot_tex == "yes":
 		tikzplotlib.save("plate-centerline.pgf")
 		
-	plt.savefig("plate-centerline.pdf")
+#	plt.savefig("plate-centerline.pdf")
 	plt.show()
 
 
