@@ -41,7 +41,7 @@ def PlateElem(e):
 			# shape functions matrix
 			N = NmatPlate(eta, psi)
 			# derivative of the shape functions
-			B, detJ = BmatPlate(eta, psi, C)
+			B, detJ = BmatPlate(eta, psi)
 
 			# element stiffness matrix
 			ke = ke + w[i]*w[j]*detJ*(B.T@model.D@B)
@@ -80,49 +80,35 @@ def NmatPlate(eta, psi):
 	return N
 
 
-def BmatPlate(eta, psi, C):
+def BmatPlate(eta, psi):
 	"""
-	Calcualte derivative of element shape function matrix B at coordinate xt
+	Calcualte derivative of element shape function matrix B at coordinate xt by explicit expression
 
 	Args:
 		eta : The first parent coordinate
 		psi : The second parent coordinate
-		C   : The physical coordinates
 
 	Returns:
 		Derivative of element shape function matrix B and Jacobian determination
 	"""
-	# global coordinates at nodes
-	x_I = np.array([C[0,0], C[1,0], C[2,0], C[3,0]])
-	y_I = np.array([C[0,1], C[1,1], C[2,1], C[3,1]])
+	# parent coordinates at nodes
+	eta_val = np.array([-1, 1, 1, -1])
+	psi_val = np.array([-1, -1, 1, 1])
 	
 	#Calculate the B_M matrix
-	B_M = np.zeros((12, 12))
+	B = np.zeros((3, 12))
 	for i in range(model.nen):
-		B_M[3*i:3*i+3,:] = np.array([[ 1, x_I[i], y_I[i], \
-								x_I[i]**2, x_I[i]*y_I[i], y_I[i]**2, \
-								x_I[i]**3, x_I[i]**2*y_I[i], x_I[i]*y_I[i]**2, \
-								y_I[i]**3, x_I[i]**3*y_I[i], x_I[i]*y_I[i]**3 ], \
-								[ 0, 0, 1, \
-								0, x_I[i], 2*y_I[i], \
-								0, x_I[i]**2, 2*x_I[i]*y_I[i], \
-								3*y_I[i]**2, x_I[i]**3, 3*x_I[i]*y_I[i]**2 ], \
-								[ 0, -1, 0, \
-								-2*x_I[i], -y_I[i], 0, \
-								-3*x_I[i]**2, -2*x_I[i]*y_I[i], -y_I[i]**2, \
-								0, -3*x_I[i]**2*y_I[i], -y_I[i]**3 ]])
-	
-	# global coordinates at (eta, psi)
-	xt = eta * model.ae + (x_I[0] + x_I[1]) / 2.0
-	yt = psi * model.be + (y_I[1] + y_I[2]) / 2.0
-	
-	#Calculate the B_Q matrix
-	B_Q = np.array([[0, 0, 0, 2, 0, 0, 6*xt, 2*yt, 0, 0, 6*xt*yt, 0], \
-					[0, 0, 0, 0, 0, 2, 0, 0, 2*xt, 6*yt, 0, 6*xt*yt], \
-					[0, 0, 0, 0, 2, 0, 0, 4*xt, 4*yt, 0, 6*xt**2, 6*yt**2]])
-	
-	B = B_Q @ np.linalg.inv(B_M)
-	
+		B[:, 3*i:3*i+3] = 1.0 / (4 * model.ae * model.be) * np.array([[ \
+								-3*model.be/model.ae*eta_val[i]*eta*(1+psi_val[i]*psi), \
+								0, \
+								-model.be*eta_val[i]*(1+3*eta_val[i]*eta)*(1+psi_val[i]*psi)], \
+								[-3*model.be/model.ae*psi_val[i]*psi*(1+eta_val[i]*eta), \
+								model.ae*psi_val[i]*(1+3*psi_val[i]*psi)*(1+eta_val[i]*eta), \
+								0], \
+								[eta_val[i]*psi_val[i]*(4-3*eta**2-3*psi**2), \
+								model.be*eta_val[i]*(3*psi**2+2*psi_val[i]*psi-1), \
+								model.ae*psi_val[i]*(1-2*eta_val[i]*eta-3*eta**2)]])
+
 	# Compute Jacobian determination
 	detJ = model.ae * model.be
 

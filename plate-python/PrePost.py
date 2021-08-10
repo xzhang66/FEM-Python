@@ -299,7 +299,7 @@ def centerline_deflection_Mx(e, ax1, ax2):
 	for i in range(model.nplot):
 		eta = etaplot[i]
 		N = NmatPlate(eta, psiplot)
-		B, detJ = BmatPlate(eta, psiplot, C)
+		B, detJ = BmatPlate(eta, psiplot)
 		deflection[i] = N@de
 		moment_all = -model.D@B@de
 		moment_x[i] = moment_all[0]
