@@ -309,8 +309,8 @@ def centerline_deflection_Mx(e, ax1, ax2):
 	
 	# plot deflection and moment Mx
 	line1, = ax1.plot(xplot, c0, 'k')
-	line1, = ax1.plot(xplot, deflection, 'b')
-	line2, = ax2.plot(xplot, moment_x, 'b')
-	if e == 0:
-		line1.set_label('FE')
+	line2, = ax1.plot(xplot, deflection, 'b')
+	line3, = ax2.plot(xplot, moment_x, 'b')
+	if e - int(model.nelx * (model.nely / 2 - 1)) == 0:
 		line2.set_label('FE')
+		line3.set_label('FE')
