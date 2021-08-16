@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from utitls import gauss
 from PlateElem import NmatPlate, BmatPlate
 import tikzplotlib
+from Exact import ExactSolution_Ex_6_3
 
 
 def create_model_json(DataFile):
@@ -56,12 +57,12 @@ def create_model_json(DataFile):
 		print('No. of Elements  {}  is not even, can not get the centerline of y-axis'.format(model.nely))
 	
 	# material properties
-	E = FEData['E']
-	ne = FEData['nu']
-	model.D = E * model.h ** 3 / (12.0 * (1 - ne ** 2)) * \
-				np.array([[1, ne, 0],
-						[ne, 1, 0],
-						[0, 0, (1-ne)/2]])
+	model.E = FEData['E']
+	model.ne = FEData['nu']
+	model.D = model.E * model.h ** 3 / (12.0 * (1 - model.ne ** 2)) * \
+				np.array([[1, model.ne, 0],
+						[model.ne, 1, 0],
+						[0, 0, (1-model.ne)/2]])
 
 	# gauss integration
 	model.ngp = FEData['ngp']
@@ -114,7 +115,7 @@ def create_model_json(DataFile):
 
 def point_and_trac():
 	"""
-	Add the uniform load, nodal forces and natural B.C. to the global force vector.
+	Add nodal forces and natural B.C. to the global force vector.
 	"""
 	# Assemble uniform load
 	P_Q = np.zeros((model.neq, 1))
@@ -269,13 +270,13 @@ def postprocess():
 		n_e = int(model.nelx * (model.nely / 2 - 1)) + e
 		centerline_deflection_Mx(n_e, ax1, ax2)
 
-	# Convert matplotlib figures into PGFPlots figures
-	if model.plot_tex == "yes":
-		tikzplotlib.save("plate-centerline.pgf")
-		
-#	plt.savefig("plate-centerline.pdf")
-	plt.show()
+	# plot the exact deflection and moment Mx distributions along centerline
+	ExactSolution_Ex_6_3(ax1, ax2)
 
+	ax1.legend()
+	ax2.legend()
+	plt.savefig("plate-centerline.pdf")
+	plt.show()
 
 def centerline_deflection_Mx(e, ax1, ax2):
 	"""

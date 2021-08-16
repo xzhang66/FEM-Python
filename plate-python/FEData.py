@@ -23,11 +23,11 @@ Global variables defining the FEM model
   h    : (float) thickness of the plate.
   q    : (float) The uniform load.
   
-  flags: (numpy.array(nnp))  Nodal boundary condition flag:
+  flags: (numpy.array(neq))  Nodal boundary condition flag:
          2 - located on the essential boundary;
          1 - located on the natural boundary.
   nd   : (int) Number of nodes on the essential boundary.
-  e_bc : (numpy.array(nnp)) Value of essential B.C.
+  e_bc : (numpy.array(neq)) Value of essential B.C.
 
   nbe  : (int) Number of prescribed traction edges.
   n_bc : (numpy.array(nnp)) Value of natural B.C.
@@ -35,6 +35,8 @@ Global variables defining the FEM model
   P    : (numpy.array(neq)) Array of nodal external forces.
   b    : (numpy.array(nen*ndof, nel)) Element nodal forces.
   D	   : (numpy.array(3, 3)) elasticity matrix
+  E	   : (float) Young's modulus
+  ne   : (float) Poisson's ratio
   
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   ID   : (numpy.array(neq) Identification matrix.
@@ -91,6 +93,8 @@ q = 0.0
 
 # material
 D = None
+E = 0.0
+ne = 0.0
 
 # define the mesh
 x = None
