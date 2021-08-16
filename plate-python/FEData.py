@@ -36,7 +36,7 @@ Global variables defining the FEM model
   b    : (numpy.array(nen*ndof, nel)) Element nodal forces.
   D	   : (numpy.array(3, 3)) elasticity matrix
   E	   : (float) Young's modulus
-  ne   : (float) Poisson's ratio
+  nu   : (float) Poisson's ratio
   
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
   ID   : (numpy.array(neq) Identification matrix.
@@ -94,7 +94,7 @@ q = 0.0
 # material
 D = None
 E = 0.0
-ne = 0.0
+nu = 0.0
 
 # define the mesh
 x = None

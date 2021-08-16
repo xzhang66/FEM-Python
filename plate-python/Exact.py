@@ -87,7 +87,7 @@ def ExactSolution_Ex_6_3(ax1, ax2):
 		w[index] = w1 + w2 + w3
 		w_xx = w1_xx + w2_xx + w3_xx
 		w_yy = w1_yy + w2_yy + w3_yy
-		Mx[index] = -D * (w_xx + model.ne * w_yy)
+		Mx[index] = -D * (w_xx + model.nu * w_yy)
 
 	xplot = np.arange(0, a, dx)
 	line4, = ax1.plot(xplot, w, '--r', label='Exact')

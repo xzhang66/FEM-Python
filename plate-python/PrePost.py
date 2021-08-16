@@ -58,11 +58,11 @@ def create_model_json(DataFile):
 	
 	# material properties
 	model.E = FEData['E']
-	model.ne = FEData['nu']
-	model.D = model.E * model.h ** 3 / (12.0 * (1 - model.ne ** 2)) * \
-				np.array([[1, model.ne, 0],
-						[model.ne, 1, 0],
-						[0, 0, (1-model.ne)/2]])
+	model.nu = FEData['nu']
+	model.D = model.E * model.h ** 3 / (12.0 * (1 - model.nu ** 2)) * \
+				np.array([[1, model.nu, 0],
+						[model.nu, 1, 0],
+						[0, 0, (1-model.nu)/2]])
 
 	# gauss integration
 	model.ngp = FEData['ngp']
