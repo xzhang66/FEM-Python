@@ -5,7 +5,7 @@ Plot exact solution for example 6-3
 
 Created on Aug. 15 2020
 
-@author: thurcni@163.com, xzhang@tsinghua.edu.cn
+@author: thujsli@163.com, xzhang@tsinghua.edu.cn
 """
 
 import FEData as model
@@ -26,10 +26,12 @@ def ExactSolution_Ex_6_3(ax1, ax2):
 	a = model.lx
 	b = model.ly
 	
-	x = np.arange(-a/2, a/2, 0.01)
+	dx = 0.1
+	nx  = math.ceil(a / dx)
+	x = np.arange(-a/2, a/2, dx)
 	y = 0.0
-	w = np.zeros(800, np.float)
-	Mx = np.zeros(800, np.float)
+	w = np.zeros(nx, np.float)
+	Mx = np.zeros(nx, np.float)
 
 	pi = math.pi
 	K = -4*q*a**2/pi**3
@@ -87,6 +89,6 @@ def ExactSolution_Ex_6_3(ax1, ax2):
 		w_yy = w1_yy + w2_yy + w3_yy
 		Mx[index] = -D * (w_xx + model.ne * w_yy)
 
-	xplot = np.arange(0, a, 0.01)
+	xplot = np.arange(0, a, dx)
 	line4, = ax1.plot(xplot, w, '--r', label='Exact')
 	line5, = ax2.plot(xplot, Mx, '--r', label='Exact')

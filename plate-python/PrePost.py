@@ -275,7 +275,12 @@ def postprocess():
 
 	ax1.legend()
 	ax2.legend()
-	plt.savefig("plate-centerline.pdf")
+
+	# Convert matplotlib figures into PGFPlots figures
+	if model.plot_tex == "yes":
+		tikzplotlib.save("plate-centerline.pgf")
+
+#	plt.savefig("plate-centerline.pdf")
 	plt.show()
 
 def centerline_deflection_Mx(e, ax1, ax2):
