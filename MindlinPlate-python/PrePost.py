@@ -255,5 +255,10 @@ def postprocess(ratio, wc):
 	
 	plt.legend()
 	plt.grid()
-	plt.savefig("wc vs h.pdf")
+
+	# Convert matplotlib figures into PGFPlots figures
+	if model.plot_tex == "yes":
+		tikzplotlib.save("wc-h.pgf")
+            
+	plt.savefig("wc-h.pdf")
 	plt.show()
