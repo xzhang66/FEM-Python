@@ -88,6 +88,10 @@ def solvedr():
 	f_E = K_E@d_E + K_EF@d_F - model.f[:model.nd]
 
 	# write to the workspace
+	print('\nsolution d')
+	print(model.d)
+	print('\nreaction f = \n', f_E)
+	
 	# write the center deflection
 	nc = int(model.nely / 2 * model.nenx + model.nelx / 2) * 3 + 3
 	w_c = model.d[model.ID[nc - 1] - 1]

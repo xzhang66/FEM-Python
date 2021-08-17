@@ -11,6 +11,8 @@ Global variables defining the FEM model
   nen  : (int) Number of element nodes.
   neq  : (int) Number of equations (D.O.F)
   ngp  : (int) Number of gauss points.
+         2 - Full integration
+         1 - Selective reduced integration
   
   lx : (float) Length of plate in the x-direction.
   ly : (float) Length of plate element in the y-direction.
@@ -20,7 +22,6 @@ Global variables defining the FEM model
   neny : (int) Number of nodes in the y-direction (= nely + 1).
   ae   : (float) Half of the length of element in the x-direction.
   be   : (float) Half of the length of element in the y-direction.
-  r    : (numpy.array(2)) Ratio of length to thickness of the square plate.
   h    : (float) thickness of the plate.
   q    : (float) The uniform load.
   
@@ -54,7 +55,10 @@ Global variables defining the FEM model
 
   plot_mesh       : plot mesh ?
   plot_nod        : plot node number ?
+  plot_centerline : plot deflection and moment Mx distributions along centerline ?
   plot_tex        : plot in latex tikz format ?
+  nplot           : (int) Number of points in a element used to plot displacements
+                    and moment (20).
 """
 
 Title = None
@@ -64,7 +68,7 @@ nnp = 0
 nel = 0
 nen = 0
 neq = 0
-ngp = 2
+ngp = 1
 nd = 0
 nbe = 0
 
@@ -79,7 +83,6 @@ nelx = 0
 nely = 0
 nenx = 0
 neny = 0
-r = None
 h = 0.0
 ae = 0.0
 be = 0.0
@@ -113,6 +116,8 @@ LM = None
 plot_mesh = None
 plot_nod = None
 plot_tex = None
+plot_centerline = None
+nplot = 20
 
 # w_c*D/q/L^4
 wc = 0.0

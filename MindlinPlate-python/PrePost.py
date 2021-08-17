@@ -14,7 +14,9 @@ import FEData as model
 import numpy as np
 import matplotlib.pyplot as plt
 from utitls import gauss
+from MindlinPlateElem import NmatMindlinPlate, BmatMindlinPlate
 import tikzplotlib
+from Exact import ExactSolution
 
 
 def create_model_json(DataFile):
@@ -40,6 +42,7 @@ def create_model_json(DataFile):
 	model.K = np.zeros((model.neq, model.neq))
 
 	# geometric data
+	model.h = FEData['h']
 	model.lx = FEData['lx']
 	model.ly = FEData['ly']
 	model.nelx = FEData['nelx']
@@ -57,7 +60,12 @@ def create_model_json(DataFile):
 	model.E = FEData['E']
 	model.ne = FEData['nu']
 	model.G = model.E / (2.0 * (1.0 + model.ne))
-	model.r = FEData['r']
+	model.Db = np.array([[1, model.ne, 0],
+							[model.ne, 1, 0],
+							[0, 0, (1-model.ne)/2]])*model.E*model.h**3/(12.0*(1-model.ne**2))
+	shcof = 5/6.0 #shear correction factor
+	model.Ds = np.array([[1, 0],
+						[0, 1]])*shcof*model.G*model.h
 
 	# gauss integration
 	model.ngp = FEData['ngp']
@@ -104,9 +112,8 @@ def create_model_json(DataFile):
 	# parameter for postprocess
 	model.plot_mesh = FEData['plot_mesh']
 	model.plot_nod = FEData['plot_nod']
+	model.plot_centerline = FEData['plot_centerline']
 	model.plot_tex = FEData['plot_tex']
-
-	plot_mesh()
 
 	model.ID = np.zeros(model.neq, dtype=np.int)
 	model.LM = np.zeros((model.nen*model.ndof, model.nel), dtype=np.int)
@@ -224,41 +231,83 @@ def plot_mesh():
 	print('No. of Equations {}'.format(model.neq))
 
 
-def postprocess(ratio, wc):
+def postprocess():
 	"""
-	Plot the curve of w_c*D/q/L^4 vs. L/h.
+	Plot the initial configuration.
 	
-	Args:
-		ratio : L/h, ratio of length to thickness of the square plate.
-		wc    : w_c*D/q/L^4, where w_c is the center deflection.
 	"""
-	if model.plot_mesh:
+	if model.plot_mesh == 'yes':
+		plot_mesh()
 		# Convert matplotlib figures into PGFPlots figures
 		if model.plot_tex == "yes":
 			tikzplotlib.save("plate-mesh.pgf")
             
-		plt.savefig("plate-mesh.pdf")
+#		plt.savefig("plate-mesh.pdf")
 		plt.show()
-	
-	nh = len(ratio)
-	s = np.ones(nh) * 0.00126
-	
-	# plot the curve of w_c*D/q/L^4 vs. L/h
-	line1, = plt.plot(ratio, wc, color='b', label='Selective reduced integration')
-	line2, = plt.plot(ratio, s, color='k', label='Exact thin plate solution')
-	
-	plt.xlim(model.r[0],model.r[1])
-	plt.xticks([10,50,100,1000])
-	
-	plt.xlabel(r'$L/h$')
-	plt.ylabel(r'$w_cD/qL^4$')
-	
-	plt.legend()
-	plt.grid()
 
-	# Convert matplotlib figures into PGFPlots figures
-	if model.plot_tex == "yes":
-		tikzplotlib.save("wc-h.pgf")
-            
-	plt.savefig("wc-h.pdf")
-	plt.show()
+	if model.plot_centerline == 'yes':
+		# plot deflection and moment Mx distributions along centerline
+		fig, (ax1, ax2) = plt.subplots(2,1)
+		plt.tight_layout()
+
+		ax1.set_title('FE analysis of centerline')
+		ax1.set_ylabel('deflection')
+
+		ax2.set_xlabel('x')
+		ax2.set_ylabel('moment Mx')
+
+		for e in range(model.nelx):
+			n_e = int(model.nelx * (model.nely / 2 - 1)) + e
+			centerline_deflection_Mx(n_e, ax1, ax2)
+
+		# plot the exact deflection and moment Mx distributions along centerline
+		ExactSolution(ax1, ax2)
+
+		ax1.legend()
+		ax2.legend()
+
+		# Convert matplotlib figures into PGFPlots figures
+		if model.plot_tex == "yes":
+			tikzplotlib.save("plate-centerline.pgf")
+
+	#	plt.savefig("plate-centerline.pdf")
+		plt.show()
+
+def centerline_deflection_Mx(e, ax1, ax2):
+	"""
+	Plot deflection and moment Mx distributions along the psi = 1 line of an element
+	
+	"""
+	# get coordinate and deflection of element nodes
+	je = model.IEN[:, e] - 1
+	C = np.array([model.x[je], model.y[je]]).T
+	de = model.d[model.LM[:,e]-1]
+	
+	# equally distributed coordinates on the psi = 1 line of an element
+	xplot = np.linspace(C[0,0], C[1,0], model.nplot)
+	etaplot = (2*xplot - C[0,0] - C[1,0])/(C[1,0] - C[0,0])
+	psiplot = 1.0
+
+	deflection = np.zeros(model.nplot)
+	deflection_all = np.zeros(3)
+	moment_x = np.zeros(model.nplot)
+	moment_all = np.zeros(3)
+	
+	for i in range(model.nplot):
+		eta = etaplot[i]
+		N = NmatMindlinPlate(eta, psiplot)
+		Bb, Bs, detJ = BmatMindlinPlate(eta, psiplot, C)
+		deflection_all = N@de
+		deflection[i] = deflection_all[2]
+		moment_all = -model.Db@Bb@de
+		moment_x[i] = moment_all[0]
+	
+	c0 = np.zeros(model.nplot)
+	
+	# plot deflection and moment Mx
+	line1, = ax1.plot(xplot, c0, 'k')
+	line2, = ax1.plot(xplot, deflection, 'b')
+	line3, = ax2.plot(xplot, moment_x, 'b')
+	if e - int(model.nelx * (model.nely / 2 - 1)) == 0:
+		line2.set_label('FE')
+		line3.set_label('FE')

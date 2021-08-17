@@ -31,9 +31,15 @@ def MindlinPlateElem(e):
 	je = model.IEN[:, e] - 1
 	C = np.array([model.x[je], model.y[je]]).T
 
-	ngpb = model.ngp      # No. of gauss points for bending stiffness calculation
-	ngps = model.ngp - 1  # No. of gauss points for shear stiffness calculation
-	ngpf = model.ngp - 1  # No. of gauss points for force calculation
+	ngpf = 2              # No. of gauss points for force calculation
+	if model.ngp == 2:    # Full integration
+		ngpb = model.ngp      # No. of gauss points for bending stiffness calculation
+		ngps = model.ngp      # No. of gauss points for shear stiffness calculation
+	elif model.ngp == 1:    # Selective reduced integration
+		ngpb = model.ngp + 1  # No. of gauss points for bending stiffness calculation
+		ngps = model.ngp      # No. of gauss points for shear stiffness calculation
+	else:
+		print("Error : Invalid value of ngp ({}) !".format(model.ngp))
 
 	# get gauss points and weights
 	wb, gpb = gauss(ngpb)
