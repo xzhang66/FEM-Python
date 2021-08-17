@@ -10,6 +10,7 @@ Created on Thu Apr 30 21:05:47 2020
 @author: xzhang
 """
 
+from sys import argv, exit
 from PrePost import create_model_json
 from MindlinPlate import FERun
 import numpy as np
@@ -17,8 +18,15 @@ import FEData as model
 import matplotlib.pyplot as plt
 import tikzplotlib
 
+nargs = len(argv)
+if nargs == 2:
+	DataFile = argv[1]
+else:
+	print("Usage ： MindlinPlate file_name")
+	exit()
+
 # create FE model from DataFile in json format
-create_model_json("plate_64.json")
+create_model_json(DataFile)
 
 # calculate w_c*D/q/L^4
 ratio = np.arange(5, 1000, 5)
@@ -29,9 +37,9 @@ wc_s = np.zeros(nh)
 for index, ri in enumerate(ratio):
 	# the plate gets thinner as L/h increases
 	model.h = model.lx / ri
-	model.Db = np.array([[1, model.ne, 0],
-						[model.ne, 1, 0],
-						[0, 0, (1-model.ne)/2]])*model.E*model.h**3/(12.0*(1-model.ne**2))
+	model.Db = np.array([[1, model.nu, 0],
+						[model.nu, 1, 0],
+						[0, 0, (1-model.nu)/2]])*model.E*model.h**3/(12.0*(1-model.nu**2))
 	shcof = 5/6.0 #shear correction factor
 	model.Ds = np.array([[1, 0],
 						[0, 1]])*shcof*model.G*model.h
