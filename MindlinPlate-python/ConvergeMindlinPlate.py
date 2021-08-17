@@ -34,12 +34,14 @@ nh = len(ratio)
 wc_e = np.ones(nh) * 0.00126
 wc_f = np.zeros(nh)
 wc_s = np.zeros(nh)
+
 for index, ri in enumerate(ratio):
 	# the plate gets thinner as L/h increases
 	model.h = model.lx / ri
 	model.Db = np.array([[1, model.nu, 0],
 						[model.nu, 1, 0],
 						[0, 0, (1-model.nu)/2]])*model.E*model.h**3/(12.0*(1-model.nu**2))
+
 	shcof = 5/6.0 #shear correction factor
 	model.Ds = np.array([[1, 0],
 						[0, 1]])*shcof*model.G*model.h
