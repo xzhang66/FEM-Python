@@ -58,11 +58,11 @@ def create_model_json(DataFile):
 
 	# material properties
 	model.E = FEData['E']
-	model.ne = FEData['nu']
-	model.G = model.E / (2.0 * (1.0 + model.ne))
-	model.Db = np.array([[1, model.ne, 0],
-							[model.ne, 1, 0],
-							[0, 0, (1-model.ne)/2]])*model.E*model.h**3/(12.0*(1-model.ne**2))
+	model.nu = FEData['nu']
+	model.G = model.E / (2.0 * (1.0 + model.nu))
+	model.Db = np.array([[1, model.nu, 0],
+							[model.nu, 1, 0],
+							[0, 0, (1-model.nu)/2]])*model.E*model.h**3/(12.0*(1-model.nu**2))
 	shcof = 5/6.0 #shear correction factor
 	model.Ds = np.array([[1, 0],
 						[0, 1]])*shcof*model.G*model.h

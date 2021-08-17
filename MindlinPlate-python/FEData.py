@@ -39,7 +39,7 @@ Global variables defining the FEM model
   Db   : (numpy.array(3, 3)) bending elasticity matrix
   Ds   : (numpy.array(2, 2)) shear elasticity matrix
   E    : (float) Young's modulus
-  ne   : (float) Poisson's ratio
+  nu   : (float) Poisson's ratio
   G	   : (float) shear modulus
   
   IEN  : (numpy.array(nen,nel)) Element connectivity array.
@@ -101,7 +101,7 @@ q = 0.0
 Db = None
 Ds = None
 E = 0.0
-ne = 0.0
+nu = 0.0
 G = 0.0
 
 # define the mesh
