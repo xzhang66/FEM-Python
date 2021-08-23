@@ -96,6 +96,6 @@
 
 	"plot_mesh": "yes", 
 	"plot_nod" : "yes",
-	"plot_tex": "no",
-	"plot_centerline": "yes"
+	"plot_centerline": "yes",
+	"plot_tex" : "yes"
 }

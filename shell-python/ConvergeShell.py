@@ -87,4 +87,6 @@ plt.legend()
 plt.grid()
 
 tikzplotlib.save("wc_convergence.pgf")
+
 #plt.savefig("wc_convergence.pdf")
+plt.show()
