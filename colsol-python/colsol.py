@@ -36,7 +36,7 @@ def colsol(n,m,K,R):
     # Perform L*D*L(T) factorization of stiffness matrix
     # LDLT is an active column solver to obtain the LDLT factorization
     # of a stiffness matrix K
-    # Note tath all indices are zero-based in Python
+    # Note that all indices are zero-based in Python
     for j in range(1, n):  
         for i in range(m[j]+1, j):
             c = 0.0
@@ -60,15 +60,15 @@ def colsol(n,m,K,R):
 
     # Reduce right-hand-side load vector
     for i in range(1, n):
-        for j in range(m[i], i):
-            R[i] -= K[j,i] * R[j]
+        for r in range(m[i], i):
+            R[i] -= K[r,i] * R[r]
     
-    # Back-substitute
     for i in range(0, n):
         R[i] /= K[i,i]
 
-    for j in range(n-1, 0, -1):
-        for i in range(m[j], j):
-            R[i] -= K[i,j]*R[j]
+    # Back-substitute
+    for i in range(n-1, 0, -1):
+        for r in range(m[i], i):
+            R[r] -= K[r,i]*R[i]
 
     return IERR, K, R
