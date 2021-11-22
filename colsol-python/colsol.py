@@ -55,7 +55,7 @@ def colsol(n,m,K,R):
             print('        Nonpositive pivot for equation ', j)
             print('        Pivot = ', K[j,j])
 
-            IERR = n
+            IERR = j
             return IERR, K, R
 
     # Reduce right-hand-side load vector
