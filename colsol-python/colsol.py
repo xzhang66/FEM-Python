@@ -19,8 +19,7 @@ def colsol(n,m,K,R):
     Input parameters
        n      - Number of equations
        m[n]   - Define the skyline of the stiffness matrix K
-                The row number (1-based indexing) of the first nonzero 
-                element in each column
+                The row number of the first nonzero element in each column
        K[n,n] - The stiffness matrix
        R[n]   - Right-hand-side load vector
     
@@ -50,15 +49,15 @@ def colsol(n,m,K,R):
             Lij = K[i,j]/K[i,i]
             K[j,j] = K[j,j] - Lij*K[i,j]
             K[i,j] = Lij
-        
-            if K[j,j] <= 0:
-                print('Error - stiffness matrix is not positive definite !')
-                print('        Nonpositive pivot for equation ', j)
-                print('        Pivot = ', K[j,j])
-                
-                IERR = n
-                return IERR, K, R
-            
+
+        if K[j,j] <= 0:
+            print('Error - stiffness matrix is not positive definite !')
+            print('        Nonpositive pivot for equation ', j)
+            print('        Pivot = ', K[j,j])
+
+            IERR = n
+            return IERR, K, R
+
     # Reduce right-hand-side load vector
     for i in range(1, n):
         for j in range(m[i], i):
