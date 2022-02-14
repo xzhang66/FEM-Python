@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advection_Diffusion - 1D FEM Program for Advection-Diffusion Problem with Galerkin and Petrov-Galerkin Method
+Advection-Diffusion - 1D FEM Program for Advection-Diffusion Problem with Galerkin and Petrov-Galerkin Method
   Element types  : 2-node linear element.
   Problem solved : 1D bar whose diffusion coefficient, cross-sectinal area and body 
   force are lineary interpolated within each element.
