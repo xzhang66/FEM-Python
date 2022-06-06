@@ -59,6 +59,12 @@ def create_model_json(DataFile):
 
 	# gauss integration
 	model.ngp = FEData['ngp']
+	
+	# Penalty that controls the magnitude of the hourglass stiffness
+	try:
+		model.kaba = FEData['kaba']
+	except KeyError:
+		model.kaba = 0
 
 	# boundary conditions
 	model.flags = np.array(FEData['flags'])

@@ -65,13 +65,15 @@ def Elast2DElem(e):
 		hs_vectors[2] = (C[3,0]*(C[0,1]-C[1,1]) + C[0,0]*(C[1,1]-C[3,1]) + C[1,0]*(C[3,1]-C[0,1])) / Ae
 		hs_vectors[3] = (C[0,0]*(C[2,1]-C[1,1]) + C[1,0]*(C[0,1]-C[2,1]) + C[2,0]*(C[1,1]-C[0,1])) / Ae
 		
-		DNNorm = 0.0
-		DN = DNmatElast2D(0.0, 0.0, C)
-		for i in range(model.ndof):
-			for I in range(model.nen):
-				DNNorm = DNNorm + DN[i,I] * DN[i,I]
-		
-		hourglass_k = 0.01 * model.G * DNNorm
+		if model.kaba != 0:
+			hourglass_k = model.kaba
+		else:
+			DNNorm = 0.0
+			DN = DNmatElast2D(0.0, 0.0, C)
+			for i in range(model.ndof):
+				for I in range(model.nen):
+					DNNorm = DNNorm + DN[i,I] * DN[i,I]
+			hourglass_k = 0.01 * model.G * DNNorm
 
 		for I in range(model.nen):
 			for i in range(model.ndof):

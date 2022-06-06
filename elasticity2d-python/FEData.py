@@ -41,6 +41,9 @@ Global variables defining the FEM model
   K    : (numpy.array(neq,neq)) Global stiffness matrix
   f    : (numpy.array(neq,1)) Global nodal force vector            
   d    : (numpy.array(neq,1)) Solution vector
+  
+  kaba : (float) Penalty that controls the magnitude of the hourglass stiffness
+                 If not defined, the default value “0.01*G*NI,i*NI,i” is used
 
   counter         : counter of nodes for stress plots
   nodestress      : stresses at nodes for the stress plots [sxx syy sxy]
@@ -86,6 +89,9 @@ G = 0.0
 
 # The type of plane problem is set to plane stress by default
 plane_strain = 0
+
+# Penalty that controls the magnitude of the hourglass stiffness
+kaba = 0
 
 # define the mesh
 x = None
