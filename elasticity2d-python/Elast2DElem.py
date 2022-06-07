@@ -77,8 +77,7 @@ def Elast2DElem(e):
 			for i in range(model.ndof):
 				a = model.ndof * I + i
 				for J in range(model.nen):
-					for j in range(model.ndof):
-						b = model.ndof * J + j
+						b = model.ndof * J + i
 						ke[a,b] = ke[a,b] + hs_vectors[I] * hs_vectors[J] * hourglass_k * Ae    
 
 	# compute element nodal force vector
