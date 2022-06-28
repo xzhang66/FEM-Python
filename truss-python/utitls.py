@@ -22,12 +22,7 @@ def assembly(e, ke):
         e   : (int) Element number
         ke  : (numpy(nen*ndof,nen*ndof)) element stiffness matrix
     """
-    for loop1 in range(model.nen*model.ndof):
-        i = model.LM[loop1, e]
-        for loop2 in range(model.nen*model.ndof):
-            j = model.LM[loop2, e]
-            model.K[i, j] += ke[loop1, loop2]
-
+    model.K[np.ix_(model.LM[:,e], model.LM[:,e])] += ke
 
 def solvedr():
     """
