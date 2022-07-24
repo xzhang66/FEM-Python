@@ -26,18 +26,34 @@ def gauss(ngp):
         w  : weights.
         gp : Gauss points in the parent element domain.
     """
+    
     if ngp == 1:
-        gp = 0
-        w = 2
+        gp = [0]
+        w = [2]
     elif ngp == 2:
-        gp = [-0.57735027, 0.57735027]
+        gp = [-np.sqrt(3)/3, np.sqrt(3)/3]
         w = [1, 1]
     elif ngp == 3:
-        gp = [-0.7745966692, 0.7745966692, 0.0]
-        w = [0.5555555556, 0.5555555556, 0.8888888889]
+        gp = [-np.sqrt(3/5), np.sqrt(3/5), 0.0]
+        w = [5/9, 5/9, 8/9]
     elif ngp == 4:
-        gp = [-0.8611363116, 0.8611363116, -0.3399810436, 0.3399810436]
-        w = [0.3478548451, 0.3478548451, 0.6521451549, 0.6521451549]
+        gp = [-np.sqrt(525+70*np.sqrt(30))/35, np.sqrt(525+70*np.sqrt(30))/35, 
+              -np.sqrt(525-70*np.sqrt(30))/35, np.sqrt(525-70*np.sqrt(30))/35]
+        w = [(18-np.sqrt(30))/36, (18-np.sqrt(30))/36, 
+             (18+np.sqrt(30))/36, (18+np.sqrt(30))/36]
+    elif ngp == 5:
+        gp = [0, 
+              -np.sqrt(245-14*np.sqrt(70))/21, np.sqrt(245-14*np.sqrt(70))/21,
+              -np.sqrt(245+14*np.sqrt(70))/21, np.sqrt(245+14*np.sqrt(70))/21]
+        w = [128/225, 
+             (322+13*np.sqrt(70))/900, (322+13*np.sqrt(70))/900,
+             (322-13*np.sqrt(70))/900, (322-13*np.sqrt(70))/900
+             ]
+    else:
+        print('\n Invalid Gauss quadrature rule: ngp = %1d (must be 1~5).'
+              %(ngp))
+        raise SystemExit
+    
     return w, gp
 
 

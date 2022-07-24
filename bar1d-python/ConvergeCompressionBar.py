@@ -46,7 +46,7 @@ EnNorm3 = np.zeros(n3Q)
 for i in range(n3Q):
     FERun("Convergence/CompressionBar/"+files_3Q[i])
 
-    # Calculate error norms for convergence study of the bar under ccompression
+    # Calculate error norms for convergence study of the bar under compression
     h3[i], L2Norm3[i], EnNorm3[i] = ErrorNorm_CompressionBar()
 
 # plot the element length - error norm curve in logarithmic scale
@@ -88,6 +88,7 @@ axs[1,1].plot(h3,EnNorm3)
 # Linear regression 
 print("The L2/energy error norms are ")
 
+
 a, C = np.polyfit(np.log(h2),np.log(L2Norm2),1)
 print("    Linear element    : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h2),np.log(EnNorm2),1)
@@ -102,3 +103,16 @@ print("    Quadratic element : ||e||_en = %e h^%g\n" %(np.e**C, a))
 # which can be added into your LaTex source code by "\input{fe_plot.tex}"
 import tikzplotlib
 tikzplotlib.save("fe_convergence.tex")
+
+
+# Print error norms obtained by the linear element and quadratic element
+#    with different element size
+print("\nError norms of linear elements")
+print('%13s %13s %13s' %('h','L2Norm','EnNorm'))
+for i in range(len(h2)):
+    print('%13.6E %13.6E %13.6E' %(h2[i], L2Norm2[i], EnNorm2[i]))
+
+print("\nError norms of quadratic elements")
+print('%13s %13s %13s' %('h','L2Norm','EnNorm'))
+for i in range(len(h3)):
+    print('%13.6E %13.6E %13.6E' %(h3[i], L2Norm3[i], EnNorm3[i]))
