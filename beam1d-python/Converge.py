@@ -78,6 +78,11 @@ line3, = axs[1,0].plot(h2,L1Norm_s,label='L_1')
 
 axs[1,1].set_xlabel('Element length (m)', fontsize=8); 
 
+# Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
+# which can be added into your LaTex source code by "\input{fe_plot.tex}"
+import tikzplotlib
+tikzplotlib.save("fe_convergence.tex")
+
 plt.savefig("convergence.pdf")
 plt.show()
 
@@ -111,7 +116,4 @@ print("    Moment         : ||e||_L1 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h2),np.log(L1Norm_s),1)
 print("    Shear force    : ||e||_L1 = %e h^%g" %(np.e**C, a))
 
-# Convert matplotlib figures into PGFPlots figures stored in a Tikz file, 
-# which can be added into your LaTex source code by "\input{fe_plot.tex}"
-import tikzplotlib
-tikzplotlib.save("fe_convergence.tex")
+
