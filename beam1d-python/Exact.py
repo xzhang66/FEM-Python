@@ -30,10 +30,10 @@ def ExactSolution_Fish_10_1(ax1, ax2, ax3):
 	L = 12; a1 = 4; p1 = 10; a2 = 8; p2 = -5; a3 = 8; m = -20; p4 = 20
 	p3 = 1; E = 1e4; I = 1.0
 
-	x = np.arange(0, 12, 0.01)
-	w = np.zeros(1200, np.float)
-	M = np.zeros(1200, np.float)
-	S = np.zeros(1200, np.float)
+	x = np.arange(0, 12, 0.05)
+	w = np.zeros(240, np.float)
+	M = np.zeros(240, np.float)
+	S = np.zeros(240, np.float)
 
 	for index, xi in enumerate(x):
 		if xi < a1:
