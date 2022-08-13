@@ -42,25 +42,29 @@ for i in range(n2L):
     h2[i], L2Norm_d[i], L2Norm_m[i], L2Norm_s[i], LinfNorm_d[i], LinfNorm_m[i], LinfNorm_s[i], L1Norm_d[i], L1Norm_m[i], L1Norm_s[i] = ErrorNorm_Ex_6_1()
 
 # plot the element length - error norm curve in logarithmic scale
-# L2 norm
 fig,(axs) = plt.subplots(2,2)
 plt.tight_layout()
 
-axs[0,0].set_title('L_2 error', fontsize=9); 
+axs[0,0].set_title('error', fontsize=9); 
 axs[0,0].set_ylabel('displacement', fontsize=8)
 axs[0,0].xaxis.set_tick_params(labelsize=7)
 axs[0,0].yaxis.set_tick_params(labelsize=7)
 axs[0,0].set_xscale('log')
 axs[0,0].set_yscale('log')
-axs[0,0].plot(h2,L2Norm_d)
+line1, = axs[0,0].plot(h2,L2Norm_d,label='L_2')
+line2, = axs[0,0].plot(h2,LinfNorm_d,label='L_∞')
+line3, = axs[0,0].plot(h2,L1Norm_d,label='L_1')
+plt.legend(handles=[line1,line2,line3],labels=['L_2','L_∞','L_1'] ,loc='best')
 
-axs[0,1].set_title('L_2 error', fontsize=9); 
+axs[0,1].set_title('error', fontsize=9); 
 axs[0,1].set_ylabel('moment', fontsize=8)
 axs[0,1].xaxis.set_tick_params(labelsize=7)
 axs[0,1].yaxis.set_tick_params(labelsize=7)
 axs[0,1].set_xscale('log')
 axs[0,1].set_yscale('log')
-axs[0,1].plot(h2,L2Norm_m)
+line1, = axs[0,1].plot(h2,L2Norm_m,label='L_2')
+line2, = axs[0,1].plot(h2,LinfNorm_m,label='L_∞')
+line3, = axs[0,1].plot(h2,L1Norm_m,label='L_1')
 
 axs[1,0].set_xlabel('Element length (m)', fontsize=8); 
 axs[1,0].set_ylabel('shear force', fontsize=8)
@@ -68,11 +72,13 @@ axs[1,0].xaxis.set_tick_params(labelsize=7)
 axs[1,0].yaxis.set_tick_params(labelsize=7)
 axs[1,0].set_xscale('log')
 axs[1,0].set_yscale('log')
-axs[1,0].plot(h2,L2Norm_s)
+line1, = axs[1,0].plot(h2,L2Norm_s,label='L_2')
+line2, = axs[1,0].plot(h2,LinfNorm_s,label='L_∞')
+line3, = axs[1,0].plot(h2,L1Norm_s,label='L_1')
 
 axs[1,1].set_xlabel('Element length (m)', fontsize=8); 
 
-plt.savefig("convergence_L2.pdf")
+plt.savefig("convergence.pdf")
 plt.show()
 
 # Linear regression 
@@ -85,40 +91,7 @@ print("    Moment         : ||e||_L2 = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h2),np.log(L2Norm_s),1)
 print("    Shear force    : ||e||_L2 = %e h^%g" %(np.e**C, a))
 
-# L infinity norm
-fig,(axs) = plt.subplots(2,2)
-plt.tight_layout()
 
-axs[0,0].set_title('L_∞ error', fontsize=9); 
-axs[0,0].set_ylabel('displacement', fontsize=8)
-axs[0,0].xaxis.set_tick_params(labelsize=7)
-axs[0,0].yaxis.set_tick_params(labelsize=7)
-axs[0,0].set_xscale('log')
-axs[0,0].set_yscale('log')
-axs[0,0].plot(h2,LinfNorm_d)
-
-axs[0,1].set_title('L_∞ error', fontsize=9); 
-axs[0,1].set_ylabel('moment', fontsize=8)
-axs[0,1].xaxis.set_tick_params(labelsize=7)
-axs[0,1].yaxis.set_tick_params(labelsize=7)
-axs[0,1].set_xscale('log')
-axs[0,1].set_yscale('log')
-axs[0,1].plot(h2,LinfNorm_m)
-
-axs[1,0].set_xlabel('Element length (m)', fontsize=8); 
-axs[1,0].set_ylabel('shear force', fontsize=8)
-axs[1,0].xaxis.set_tick_params(labelsize=7)
-axs[1,0].yaxis.set_tick_params(labelsize=7)
-axs[1,0].set_xscale('log')
-axs[1,0].set_yscale('log')
-axs[1,0].plot(h2,LinfNorm_s)
-
-axs[1,1].set_xlabel('Element length (m)', fontsize=8); 
-
-plt.savefig("convergence_L∞.pdf")
-plt.show()
-
-# Linear regression 
 print("The L∞ error norms are ")
 
 a, C = np.polyfit(np.log(h2),np.log(LinfNorm_d),1)
@@ -128,40 +101,7 @@ print("    Moment         : ||e||_L∞ = %e h^%g" %(np.e**C, a))
 a, C = np.polyfit(np.log(h2),np.log(LinfNorm_s),1)
 print("    Shear force    : ||e||_L∞ = %e h^%g" %(np.e**C, a))
 
-# L1 norm
-fig,(axs) = plt.subplots(2,2)
-plt.tight_layout()
 
-axs[0,0].set_title('L_1 error', fontsize=9); 
-axs[0,0].set_ylabel('displacement', fontsize=8)
-axs[0,0].xaxis.set_tick_params(labelsize=7)
-axs[0,0].yaxis.set_tick_params(labelsize=7)
-axs[0,0].set_xscale('log')
-axs[0,0].set_yscale('log')
-axs[0,0].plot(h2,L1Norm_d)
-
-axs[0,1].set_title('L_1 error', fontsize=9); 
-axs[0,1].set_ylabel('moment', fontsize=8)
-axs[0,1].xaxis.set_tick_params(labelsize=7)
-axs[0,1].yaxis.set_tick_params(labelsize=7)
-axs[0,1].set_xscale('log')
-axs[0,1].set_yscale('log')
-axs[0,1].plot(h2,L1Norm_m)
-
-axs[1,0].set_xlabel('Element length (m)', fontsize=8); 
-axs[1,0].set_ylabel('shear force', fontsize=8)
-axs[1,0].xaxis.set_tick_params(labelsize=7)
-axs[1,0].yaxis.set_tick_params(labelsize=7)
-axs[1,0].set_xscale('log')
-axs[1,0].set_yscale('log')
-axs[1,0].plot(h2,L1Norm_s)
-
-axs[1,1].set_xlabel('Element length (m)', fontsize=8); 
-
-plt.savefig("convergence_L1.pdf")
-plt.show()
-
-# Linear regression 
 print("The L1 error norms are ")
 
 a, C = np.polyfit(np.log(h2),np.log(L1Norm_d),1)
