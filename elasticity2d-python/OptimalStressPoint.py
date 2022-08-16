@@ -59,17 +59,20 @@ ax1.set_title('FE analysis of centerline(1 Gauss point)')
 ax1.set_ylabel('sigma_rr')
 ax1.set_ylim(-1.0,0.4)
 
-line1, = ax1.plot(xplot1GP[:,0], sigma_rr_1GP[:,0],'--',label='μ=0.3')
-line2, = ax1.plot(xplot1GP[:,1], sigma_rr_1GP[:,1],'--',label='μ=0.4')
-line3, = ax1.plot(xplot1GP[:,2], sigma_rr_1GP[:,2],'--',label='μ=0.45')
-line4, = ax1.plot(xplot1GP[:,3], sigma_rr_1GP[:,3],'--',label='μ=0.499')
+for i in range(4):
+	line1, = ax1.plot(xplot1GP[i*nplot:(i+1)*nplot,0], sigma_rr_1GP[i*nplot:(i+1)*nplot,0],'--g')
+	line2, = ax1.plot(xplot1GP[i*nplot:(i+1)*nplot,1], sigma_rr_1GP[i*nplot:(i+1)*nplot,1],'--b')
+	line3, = ax1.plot(xplot1GP[i*nplot:(i+1)*nplot,2], sigma_rr_1GP[i*nplot:(i+1)*nplot,2],'--k')
+	line4, = ax1.plot(xplot1GP[i*nplot:(i+1)*nplot,3], sigma_rr_1GP[i*nplot:(i+1)*nplot,3],'--r')
 
 #Optimal stress point
 ax1.scatter(xplot1GP_osp,sigma_rr_1GP_osp,edgecolors='k')
 
-Exact(ax1)
+x_ex, sigma_ex = Exact()
 
-ax1.legend()
+line5, = ax1.plot(x_ex, sigma_ex, 'r')
+
+ax1.legend([line1,line2,line3,line4,line5],['μ=0.3','μ=0.4','μ=0.45','μ=0.499','Exact'])
 
 tikzplotlib.save("OptimalStressPoint_1GP.tex")
 
@@ -82,17 +85,19 @@ ax1.set_title('FE analysis of centerline(2 Gauss point)')
 ax1.set_ylabel('sigma_rr')
 ax1.set_ylim(-1.0,0.4)
 
-line1, = ax1.plot(xplot2GP[:,0], sigma_rr_2GP[:,0],'--',label='μ=0.3')
-line2, = ax1.plot(xplot2GP[:,1], sigma_rr_2GP[:,1],'--',label='μ=0.4')
-line3, = ax1.plot(xplot2GP[:,2], sigma_rr_2GP[:,2],'--',label='μ=0.45')
-line4, = ax1.plot(xplot2GP[:,3], sigma_rr_2GP[:,3],'--',label='μ=0.499')
+for i in range(4):
+	line1, = ax1.plot(xplot2GP[i*nplot:(i+1)*nplot,0], sigma_rr_2GP[i*nplot:(i+1)*nplot,0],'--g')
+	line2, = ax1.plot(xplot2GP[i*nplot:(i+1)*nplot,1], sigma_rr_2GP[i*nplot:(i+1)*nplot,1],'--b')
+	line3, = ax1.plot(xplot2GP[i*nplot:(i+1)*nplot,2], sigma_rr_2GP[i*nplot:(i+1)*nplot,2],'--k')
+	line4, = ax1.plot(xplot2GP[i*nplot:(i+1)*nplot,3], sigma_rr_2GP[i*nplot:(i+1)*nplot,3],'--r')
 
 #Optimal stress point
 ax1.scatter(xplot1GP_osp,sigma_rr_2GP_osp,edgecolors='k')
 
-Exact(ax1)
+line5, = ax1.plot(x_ex, sigma_ex, 'r')
 
-ax1.legend()
+ax1.legend([line1,line2,line3,line4,line5],['μ=0.3','μ=0.4','μ=0.45','μ=0.499','Exact'])
+
 
 tikzplotlib.save("OptimalStressPoint_2GP.tex")
 
