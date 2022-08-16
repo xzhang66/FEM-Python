@@ -16,11 +16,11 @@ import tikzplotlib
 
 # Json data files for reduced integration
 files_1GP = ("CylindricalCavity_1_03.json", "CylindricalCavity_1_04.json",
-            "CylindricalCavity_1_045.json", "CylindricalCavity_1_049999.json")
+            "CylindricalCavity_1_045.json", "CylindricalCavity_1_0499.json")
 
 # Json data files for full integration
 files_2GP = ("CylindricalCavity_2_03.json", "CylindricalCavity_2_04.json",
-            "CylindricalCavity_2_045.json", "CylindricalCavity_2_049999.json")
+            "CylindricalCavity_2_045.json", "CylindricalCavity_2_0499.json")
 
 # Run FE analysis for all files using 2L element
 nplot=21
@@ -57,12 +57,12 @@ for i in range(n2GP):
 fig, (ax1) = plt.subplots(1,1)
 ax1.set_title('FE analysis of centerline(1 Gauss point)')
 ax1.set_ylabel('sigma_rr')
-ax1.set_ylim(-1.0,0.1)
+ax1.set_ylim(-1.0,0.4)
 
 line1, = ax1.plot(xplot1GP[:,0], sigma_rr_1GP[:,0],'--',label='μ=0.3')
 line2, = ax1.plot(xplot1GP[:,1], sigma_rr_1GP[:,1],'--',label='μ=0.4')
 line3, = ax1.plot(xplot1GP[:,2], sigma_rr_1GP[:,2],'--',label='μ=0.45')
-line4, = ax1.plot(xplot1GP[:,3], sigma_rr_1GP[:,3],'--',label='μ=0.49999')
+line4, = ax1.plot(xplot1GP[:,3], sigma_rr_1GP[:,3],'--',label='μ=0.499')
 
 #Optimal stress point
 ax1.scatter(xplot1GP_osp,sigma_rr_1GP_osp,edgecolors='k')
@@ -73,18 +73,19 @@ ax1.legend()
 
 tikzplotlib.save("OptimalStressPoint_1GP.tex")
 
+plt.savefig("OptimalStressPoint_1GP.pdf")
 plt.show()
 
 #Full integration
 fig, (ax1) = plt.subplots(1,1)
 ax1.set_title('FE analysis of centerline(2 Gauss point)')
 ax1.set_ylabel('sigma_rr')
-ax1.set_ylim(-1.0,0.1)
+ax1.set_ylim(-1.0,0.4)
 
 line1, = ax1.plot(xplot2GP[:,0], sigma_rr_2GP[:,0],'--',label='μ=0.3')
 line2, = ax1.plot(xplot2GP[:,1], sigma_rr_2GP[:,1],'--',label='μ=0.4')
 line3, = ax1.plot(xplot2GP[:,2], sigma_rr_2GP[:,2],'--',label='μ=0.45')
-line4, = ax1.plot(xplot2GP[:,3], sigma_rr_2GP[:,3],'--',label='μ=0.49999')
+line4, = ax1.plot(xplot2GP[:,3], sigma_rr_2GP[:,3],'--',label='μ=0.499')
 
 #Optimal stress point
 ax1.scatter(xplot1GP_osp,sigma_rr_2GP_osp,edgecolors='k')
@@ -95,5 +96,6 @@ ax1.legend()
 
 tikzplotlib.save("OptimalStressPoint_2GP.tex")
 
+plt.savefig("OptimalStressPoint_2GP.pdf")
 plt.show()
 
