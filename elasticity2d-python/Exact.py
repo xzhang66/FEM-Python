@@ -18,7 +18,7 @@ import FEData as model
 from Elast2DElem import NmatElast2D, BmatElast2D
 
 
-def Exact(ax1):
+def Exact():
 	"""
 	Plot the exact deflection and moment Mx along the centerline
 	of the plate(Example 6-3) in ax1 and ax2, respectively.
@@ -42,7 +42,7 @@ def Exact(ax1):
 		sigma_rr[index] = (pa*a**2-pb*b**2)/(b**2-a**2) - a**2*b**2/(b**2-a**2)/xi**2*(pa-pb)
 
 	xplot = np.arange(a, b, dx)
-	line5, = ax1.plot(xplot, sigma_rr, 'r', label='Exact')
+	return xplot, sigma_rr
 
 def sigmarr():
 	"""
